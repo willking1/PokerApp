@@ -2,13 +2,15 @@ import java.io.*;
 
 public class Manager {
     
-    private int size;
+    private ServerThread[] clients;
+    private int mapSize;
 
     public Manager() {
 
-        size = 18;
+        clients = new ServerThread[0];
+        mapSize = 18;
 
-        char[][] map = new char[size][size];
+        char[][] map = new char[mapSize][mapSize];
 
         try {
             BufferedReader br = new BufferedReader(new FileReader("./resources/Map1.txt"));
@@ -23,17 +25,15 @@ public class Manager {
                 i++;
             }
         } catch (IOException e) { e.printStackTrace();}
+    }
 
-        Game game = new Game(map);
-
-        String comp = game.compress();
-
-        System.out.println(comp);
-
-        game.set(comp);
-
-        game.print();
-
+    public void add(ServerThread sT) {
+        ServerThread[] newClients = new ServerThread[clients.length+1];
+        for(int i=0; i<clients.length; i++) {
+            newClients[i] = clients[i];
+        }
+        newClients[newClients.length-1] = sT;
+        clients = newClients;
     }
 
 }
