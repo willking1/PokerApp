@@ -13,16 +13,16 @@ public class ClientScreen extends JPanel implements ActionListener {
 		super.paintComponent(g);
         char[][] currState = new char[50][50];
         g.setColor(Color.GREEN);
-        g.fillRect(20, 20, 500, 500);
-        for(int i = 0; i < currState.length; i++) {
-            for(int j = 0; j < currState[0].length; i++) {
-                g.drawRect(20+i*(500/currState.length), 20+j*(500/currState.length), (500/currState.length), (500/currState.length));
-            }
-        }
+        g.fillRect(0, 0, 500, 500);
+        // for(int i = 0; i < currState.length; i++) {
+        //     for(int j = 0; j < currState[0].length; i++) {
+        //         g.drawRect(20+i*(500/currState.length), 20+j*(500/currState.length), (500/currState.length), (500/currState.length));
+        //     }
+        // }
 	}
 
 	public Dimension getPreferredSize() {
-		return new Dimension(1000,1000);
+		return new Dimension(500,500);
 	}
 
 	public void poll() throws IOException{
