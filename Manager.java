@@ -23,6 +23,17 @@ public class Manager {
                 i++;
             }
         } catch (IOException e) { e.printStackTrace();}
+
+        Game game = new Game(map);
+
+        String comp = game.compress();
+
+        System.out.println(comp);
+
+        game.set(comp);
+
+        game.print();
+
     }
 
 }
