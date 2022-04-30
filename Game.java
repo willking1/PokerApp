@@ -48,4 +48,7 @@ public class Game {
         System.out.println();
     }
 
+    public char[][] getArr() {
+        return map;
+    }
 }
