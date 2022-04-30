@@ -1,1 +1,1 @@
-# SnakeRoyale Gangster
+# SnakeRoyale - snakes on a battlebus!
