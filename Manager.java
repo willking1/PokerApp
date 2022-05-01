@@ -24,6 +24,7 @@ public class Manager {
                 }
                 i++;
             }
+            br.close();
         } catch (IOException e) { e.printStackTrace();}
     }
 

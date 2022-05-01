@@ -12,6 +12,6 @@ public class Client {
 		frame.pack();
 		frame.setVisible(true);
 		// sc.poll();
-        // sc.animate();
+        sc.animate();
     }
 }
