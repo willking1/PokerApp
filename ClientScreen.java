@@ -10,6 +10,7 @@ public class ClientScreen extends JPanel implements KeyListener {
     private Game gameboard;
 	public ClientScreen() {
 		setLayout(null);
+        setFocusable(true);
         gameboard = new Game(new char[][]{
             {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
             {'X', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', 'X'},
@@ -36,7 +37,6 @@ public class ClientScreen extends JPanel implements KeyListener {
                 System.out.print(gameboard.getArr()[i][j] + " ");
             } System.out.println();
         }
-
         setFocusable(true);
         addKeyListener(this);
 	}
@@ -87,7 +87,7 @@ public class ClientScreen extends JPanel implements KeyListener {
         while(true) {
             repaint();
             try {
-                Thread.sleep(40000);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }    
@@ -95,14 +95,27 @@ public class ClientScreen extends JPanel implements KeyListener {
         
     }
 
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+
+    }
 
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         if(keyCode == 39) {
-            System.out.println("ss");
+            gameboard.right();
+        }
+        if(keyCode == 37) {
+            gameboard.left();
+        }
+        if(keyCode == 38) {
+            gameboard.up();
+        }
+        if(keyCode == 40) {
+            gameboard.down();
         }
     } 
 
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+
+    }
 }
