@@ -24,6 +24,7 @@ public class Manager {
                 }
                 i++;
             }
+            br.close();
         } catch (IOException e) { e.printStackTrace();}
     }
 
@@ -34,6 +35,16 @@ public class Manager {
         }
         newClients[newClients.length-1] = sT;
         clients = newClients;
+    }
+
+    public void broadcast(String msg) {
+        for(int i=0; i<clients.length; i++) {
+            clients[i].send(msg);
+        }
+    }
+
+    public int size() {
+        return clients.length;
     }
 
 }

@@ -17,4 +17,9 @@ public class ServerThread implements Runnable {
 
     public void run() {}
 
+    public void send(String msg) {
+        out.println(msg);
+        out.flush();
+    }
+
 }

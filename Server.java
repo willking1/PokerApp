@@ -22,7 +22,11 @@ public class Server {
             thread.start();
             manager.add(sT);
 
+            System.out.println("\nCurrent clients: " + manager.size());
+            manager.broadcast("This is a test");
+
         }
+
 
     }
 }
