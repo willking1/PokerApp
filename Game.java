@@ -17,6 +17,15 @@ public class Game {
         snakeNum = 0;
     }
 
+    public Game(int size) {
+        map = new char[size][size];
+        splitChar = " ";
+        splitLine = "|";
+        snake = new int[3];
+        tail = new int[2];
+        snakeNum = 0;
+    }
+
     public void set(String comp) {
         int x = 0;
         int y = 0;

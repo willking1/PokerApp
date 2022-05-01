@@ -15,7 +15,9 @@ public class ServerThread implements Runnable {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
-    public void run() {}
+    public void run() {
+        //start listen
+    }
 
     public void send(String msg) {
         out.println(msg);

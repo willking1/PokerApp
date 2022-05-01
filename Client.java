@@ -11,7 +11,9 @@ public class Client {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		// sc.poll();
-        sc.animate();
+		sc.animate(); //WHY GOD WHY
+		// sc.poll(); //hanging ?
+		System.out.println("called"); // will never run?
+		//code after one while loop is unreachable...
     }
 }

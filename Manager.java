@@ -4,16 +4,21 @@ public class Manager {
     
     private ServerThread[] clients;
     private int mapSize;
+    private String mapID;
 
     public Manager() {
 
         clients = new ServerThread[0];
         mapSize = 18;
+        mapID = "Map1";
+    }
+
+    private void startGame() {
 
         char[][] map = new char[mapSize][mapSize];
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("./resources/Map1.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("./resources/" + mapID + ".txt"));
             String line = "";
             String buffer = " ";
             int i = 0;
@@ -27,6 +32,7 @@ public class Manager {
             br.close();
 
             Game startGame = new Game(map);
+
             broadcast(startGame.compress());
 
         } catch (IOException e) { e.printStackTrace();}
@@ -49,6 +55,12 @@ public class Manager {
 
     public int size() {
         return clients.length;
+    }
+
+    public void checkStart() { //temp
+        if(clients.length >= 1) {
+            startGame();
+        }
     }
 
 }
