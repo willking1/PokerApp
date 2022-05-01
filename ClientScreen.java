@@ -8,13 +8,24 @@ import java.awt.event.KeyEvent;
 
 public class ClientScreen extends JPanel implements KeyListener {
 
+    //game
     private Game gameboard;
     private boolean started;
+
+    //snake - temp?
+    private int width;
+
+    //network
+    private String hostName;
+    private int portNumber;
+    private Socket serverSocket;
+    private BufferedReader in;
+    private PrintWriter out;
 
 	public ClientScreen() throws IOException {
 		setLayout(null);
         setFocusable(true);
-        gameboard = new Game(18);
+        gameboard = new Game(50);
         started = false;
         // gameboard.addSnake();
         // for(int i = 0; i < gameboard.getArr().length; i++) {
@@ -25,16 +36,23 @@ public class ClientScreen extends JPanel implements KeyListener {
         setFocusable(true);
         addKeyListener(this);
 
-        // poll();
+        hostName = "localhost"; 
+		portNumber = 96;
+		serverSocket = new Socket(hostName, portNumber);
+        in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+        out = new PrintWriter(serverSocket.getOutputStream(), true);
+
+        width = 50;
 	}
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 
         if(started) {
+
             char[][] currState = gameboard.getArr();
             g.drawRect(20, 20, 18*20, 18*20);
-            for(int i = 0; i < currState.length; i++) {
+            for(int i = 0; i < currState.length; i++) { //STOP SCALING THIS WAY
                 for(int j = 0; j < currState[0].length; j++) {
                     g.drawRect(20+i*(18*20/currState.length), 20+j*(18*20/currState.length), (18*20/currState.length), (18*20/currState.length));
                     if(currState[i][j] == 'X') {
@@ -50,7 +68,7 @@ public class ClientScreen extends JPanel implements KeyListener {
                     } 
                 }
             }
-            gameboard.move();
+            gameboard.move(); //TODO: patch out of bounds
         }
         
 	}
@@ -59,42 +77,30 @@ public class ClientScreen extends JPanel implements KeyListener {
 		return new Dimension(700,700);
 	}
 
-	public void poll() throws IOException{
-		String hostName = "localhost"; 
-		int portNumber = 96;
-		Socket serverSocket = new Socket(hostName, portNumber);
-        BufferedReader in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-        try {
-            while(true) { // hangs on loop not read
-                String input = in.readLine();
-                System.out.println("Input: " + input);
-                gameboard.set(input);
-                gameboard.addSnake(); //TEMP
-                started = true;
-                // repaint(); //necessary?
-            }
-        }catch(Exception e) {
-            System.out.println(e);
-        }
-		serverSocket.close();
-	}
-
-    public void animate() { //not calling
+    public void poll() throws IOException {
         while(true) {
+            //check if new board is available or dehang?
+            try {
+                String input = in.readLine();
+                gameboard.set(input);
+                if(!started) {
+                    gameboard.addSnake(); //TEMP?
+                    started = true;
+                }
+                
+            } catch (Exception e) {System.out.println(e);}
+
+            out.println(gameboard.compress());
+
             repaint();
-            // try {
-            //     Thread.sleep(200);
-            // } catch (InterruptedException e) {
-            //     e.printStackTrace();
-            // }    
-            if(false) break;
+
+            try { Thread.sleep(100); } catch (Exception e) { System.out.println(e); }; //SLEEP
         }
-        
     }
 
     public void keyTyped(KeyEvent e) {}
 
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) { //why does this appear delayed?
         if(!started) return;
         int keyCode = e.getKeyCode();
         if(keyCode == 39) {

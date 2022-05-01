@@ -9,7 +9,7 @@ public class Manager {
     public Manager() {
 
         clients = new ServerThread[0];
-        mapSize = 18;
+        mapSize = 50;
         mapID = "Map1";
     }
 

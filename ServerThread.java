@@ -16,7 +16,15 @@ public class ServerThread implements Runnable {
     }
 
     public void run() {
-        //start listen
+        poll();
+    }
+
+    public void poll() {
+        while(true) {
+            try {
+                manager.broadcast(in.readLine());
+            } catch (Exception e) {System.out.println(e);}
+        }
     }
 
     public void send(String msg) {
