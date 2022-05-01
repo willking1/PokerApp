@@ -42,7 +42,7 @@ public class ClientScreen extends JPanel implements KeyListener {
         in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
         out = new PrintWriter(serverSocket.getOutputStream(), true);
 
-        width = 50;
+        width = 25; //think this is good
 	}
 	
 	public void paintComponent(Graphics g){
@@ -51,19 +51,19 @@ public class ClientScreen extends JPanel implements KeyListener {
         if(started) {
 
             char[][] currState = gameboard.getArr();
-            g.drawRect(20, 20, 18*20, 18*20);
-            for(int i = 0; i < currState.length; i++) { //STOP SCALING THIS WAY
+            g.drawRect(20, 20, 18*20, 18*20); //border
+            for(int i = 0; i < currState.length; i++) {
                 for(int j = 0; j < currState[0].length; j++) {
-                    g.drawRect(20+i*(18*20/currState.length), 20+j*(18*20/currState.length), (18*20/currState.length), (18*20/currState.length));
+                    // g.drawRect(20+i*(width), 20+j*(10), (width), (width));
                     if(currState[i][j] == 'X') {
                         g.setColor(Color.RED);
-                        g.fillRect(21+i*(18*20/currState.length), 21+j*(18*20/currState.length), (18*20/currState.length), (18*20/currState.length));
+                        g.fillRect(21+i*(width), 21+j*(width), (width), (width));
                         g.setColor(Color.BLACK);
                     } 
                     if(Character.isDigit(currState[i][j])) {
                         Integer.valueOf(currState[i][j]);
                         g.setColor(Color.GREEN);
-                        g.fillRect(21+i*(18*20/currState.length), 21+j*(18*20/currState.length), (18*20/currState.length), (18*20/currState.length));
+                        g.fillRect(21+i*(width), 21+j*(width), (width), (width));
                         g.setColor(Color.BLACK);
                     } 
                 }

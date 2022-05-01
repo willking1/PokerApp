@@ -23,7 +23,9 @@ public class ServerThread implements Runnable {
         while(true) {
             try {
                 manager.broadcast(in.readLine());
-            } catch (Exception e) {System.out.println(e);}
+            } catch (Exception e) {
+                //break here?
+            }
         }
     }
 
