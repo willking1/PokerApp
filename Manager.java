@@ -25,6 +25,10 @@ public class Manager {
                 i++;
             }
             br.close();
+
+            Game startGame = new Game(map);
+            broadcast(startGame.compress());
+
         } catch (IOException e) { e.printStackTrace();}
     }
 
