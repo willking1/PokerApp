@@ -3,6 +3,9 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+
 public class ClientScreen extends JPanel implements KeyListener {
     private Game gameboard;
 	public ClientScreen() {
@@ -33,6 +36,8 @@ public class ClientScreen extends JPanel implements KeyListener {
                 System.out.print(gameboard.getArr()[i][j] + " ");
             } System.out.println();
         }
+
+        setFocusable(true);
         addKeyListener(this);
 	}
 	
@@ -90,27 +95,14 @@ public class ClientScreen extends JPanel implements KeyListener {
         
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        if(keyCode == 39) {
-            System.out.println("ss");
-        }
-    }
+    public void keyTyped(KeyEvent e) {}
 
-    @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         if(keyCode == 39) {
             System.out.println("ss");
         }
-    }
+    } 
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        if(keyCode == 39) {
-            System.out.println("ss");
-        }
-    }
+    public void keyReleased(KeyEvent e) {}
 }
