@@ -91,15 +91,14 @@ public class Game {
     //Also slightly buzzin at the moment
     public void move() {
         for(int i=0; i<snakes.size(); i++) {
-            //get each snake here
-            snakes.get(i).get(0).setDir(dirs.get(i));
+            //get each snake here 
+            snakes.get(i).get(0).setDir(dirs.get(i)); //set direction of head
             map[snakes.get(i).get(snakes.get(i).size()-1).getX()][snakes.get(i).get(snakes.get(i).size()-1).getY()] = '+';
-            for(int j=snakes.get(i).size()-1; j>=0; j--) {
-                //moves each tail node
-                
+            for(int j = snakes.get(i).size()-1; j >= 0; j--) {
                 snakes.get(i).get(j).move();
-            }
-            map[snakes.get(i).get(0).getX()][snakes.get(i).get(0).getY()] = Character.forDigit(i,10);
+                map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = Character.forDigit(i,10);
+            } System.out.println();
+
         }
     }
 
