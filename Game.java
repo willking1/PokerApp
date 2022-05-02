@@ -5,25 +5,25 @@ public class Game {
     private int startCount;
     private char[][] map;
     private String splitChar, splitLine;
-    private CAL<Integer> dir;
+    private CAL<Integer> dirs;
     private CAL<CAL<Tail>> snakes;
 
     public Game(char[][] map) {
         this.map = map;
         splitChar = " ";
         splitLine = "|";
-        startCount = 3;
+        startCount = 4;
         snakes = new CAL<CAL<Tail>>();
-        dir = new CAL<Integer>();
+        dirs = new CAL<Integer>();
     }
 
     public Game(int size) {
         map = new char[size][size];
         splitChar = " ";
         splitLine = "|";
-        startCount = 3;
+        startCount = 4;
         snakes = new CAL<CAL<Tail>>();
-        dir = new CAL<Integer>();
+        dirs = new CAL<Integer>();
     }
 
     public void set(String comp) {
@@ -84,6 +84,7 @@ public class Game {
             map[newX][newY] = Character.forDigit(ind,10);
             snakes.get(ind).add(new Tail(snakes.get(ind).get(i-1), -1, newX, newY));
         }
+        dirs.add(dir);
         return ind; //returns client id
     }
 
@@ -91,8 +92,9 @@ public class Game {
     public void move() {
         for(int i=0; i<snakes.size(); i++) {
             //get each snake here
+            snakes.get(i).get(0).setDir(dirs.get(i));
             map[snakes.get(i).get(snakes.get(i).size()-1).getX()][snakes.get(i).get(snakes.get(i).size()-1).getY()] = '+';
-            for(int j=0; j<snakes.get(i).size(); j++) {
+            for(int j=snakes.get(i).size()-1; j>=0; j--) {
                 //moves each tail node
                 
                 snakes.get(i).get(j).move();
@@ -108,19 +110,19 @@ public class Game {
     dir 4 = down
     */
     public void left(int id) {
-        dir.set(id, dir.get(id)!=2 ? 1 : 2);
+        dirs.set(id, dirs.get(id)!=2 ? 1 : 2);
     }
 
     public void right(int id) {
-        dir.set(id, dir.get(id)!=1 ? 2 : 1);
+        dirs.set(id, dirs.get(id)!=1 ? 2 : 1);
     }
 
     public void down(int id) {
-        dir.set(id, dir.get(id)!=3 ? 4 : 3);
+        dirs.set(id, dirs.get(id)!=3 ? 4 : 3);
     }
 
     public void up(int id) {
-        dir.set(id, dir.get(id)!=4 ? 3 : 4);
+        dirs.set(id, dirs.get(id)!=4 ? 3 : 4);
     }
 
     public char[][] getArr() {
