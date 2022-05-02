@@ -6,6 +6,7 @@ public class Tail {
     private int posX;
     private int posY;
     private int dir;
+    private char[][] map;
     
     public Tail(Tail next, int dir, int posX, int posY) {
         this.next = next;

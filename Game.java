@@ -67,8 +67,11 @@ public class Game {
         int ind = snakes.size();
         snakes.add(new CAL<Tail>());
         snakes.get(ind).add(new Tail(null, dir, startX, startY));
+        map[startX][startY] = Character.forDigit(ind,10);
         for(int i=1; i<startCount; i++) {
             int newX, newY;
+            newX = startX;
+            newY = startY;
             if(dir == 1) {
                 newX = startX+i;
             } else if(dir == 2) {
@@ -78,6 +81,7 @@ public class Game {
             } else {
                 newY = startY+i;
             }
+            map[newX][newY] = Character.forDigit(ind,10);
             snakes.get(ind).add(new Tail(snakes.get(ind).get(i-1), -1, startX, startY));
         }
         return ind; //returns client id
@@ -87,10 +91,11 @@ public class Game {
     public void move() {
         for(int i=0; i<snakes.size(); i++) {
             //get each snake here
-            //move head first?
             for(int j=0; j<snakes.get(i).size(); j++) {
                 //moves each tail node
+                map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = '+';
                 snakes.get(i).get(j).move();
+                map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = Character.forDigit(i,10);
             }
         }
     }
