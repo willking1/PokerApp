@@ -2,26 +2,28 @@ import java.io.*;
 
 public class Game {
 
-    private int snakeNum;
+    private int startCount;
     private char[][] map;
     private String splitChar, splitLine;
-    private int dir;
+    private CAL<Integer> dir;
     private CAL<CAL<Tail>> snakes;
 
     public Game(char[][] map) {
         this.map = map;
         splitChar = " ";
         splitLine = "|";
-        snakeNum = 0;
+        startCount = 3;
         snakes = new CAL<CAL<Tail>>();
+        dir = new CAL<Integer>();
     }
 
     public Game(int size) {
         map = new char[size][size];
         splitChar = " ";
         splitLine = "|";
-        snakeNum = 0;
+        startCount = 3;
         snakes = new CAL<CAL<Tail>>();
+        dir = new CAL<Integer>();
     }
 
     public void set(String comp) {
@@ -61,35 +63,58 @@ public class Game {
         System.out.println();
     }
 
-    public void addSnake() {
+    public int addSnake(int startX, int startY, int dir) {
+        int ind = snakes.size();
         snakes.add(new CAL<Tail>());
+        snakes.get(ind).add(new Tail(null, dir, startX, startY));
+        for(int i=1; i<startCount; i++) {
+            int newX, newY;
+            if(dir == 1) {
+                newX = startX+i;
+            } else if(dir == 2) {
+                newX = startX-i;
+            } else if(dir == 3) {
+                newY = startY-i;
+            } else {
+                newY = startY+i;
+            }
+            snakes.get(ind).add(new Tail(snakes.get(ind).get(i-1), -1, startX, startY));
+        }
+        return ind; //returns client id
     }
 
     //Also slightly buzzin at the moment
     public void move() {
-        
+        for(int i=0; i<snakes.size(); i++) {
+            //get each snake here
+            //move head first?
+            for(int j=0; j<snakes.get(i).size(); j++) {
+                //moves each tail node
+                snakes.get(i).get(j).move();
+            }
+        }
     }
 
-    /*
+    /* WHO THE FUCK ONE INDEXED THIS
     dir 1 = left
     dir 2 = right
     dir 3 = up
     dir 4 = down
     */
-    public void left() {
- 
+    public void left(int id) {
+        dir.set(id, dir.get(id)!=2 ? 1 : 2);
     }
 
-    public void right() {
-        
+    public void right(int id) {
+        dir.set(id, dir.get(id)!=1 ? 2 : 1);
     }
 
-    public void down() {
-    
+    public void down(int id) {
+        dir.set(id, dir.get(id)!=3 ? 4 : 3);
     }
 
-    public void up() {
-  
+    public void up(int id) {
+        dir.set(id, dir.get(id)!=4 ? 3 : 4);
     }
 
     public char[][] getArr() {

@@ -11,6 +11,7 @@ public class ClientScreen extends JPanel implements KeyListener {
     //game
     private Game gameboard;
     private boolean started;
+    private int id;
 
     //snake - temp?
     private int width;
@@ -23,11 +24,11 @@ public class ClientScreen extends JPanel implements KeyListener {
     private PrintWriter out;
 
 	public ClientScreen() throws IOException {
+        id = -1;
 		setLayout(null);
         setFocusable(true);
         gameboard = new Game(50);
         started = false;
-        // gameboard.addSnake(6, 6);
         setFocusable(true);
         addKeyListener(this);
 
@@ -79,7 +80,7 @@ public class ClientScreen extends JPanel implements KeyListener {
                 String input = in.readLine();
                 gameboard.set(input);
                 if(!started) {
-                    // gameboard.addSnake(14, 10, "left"); //TEMP?
+                    id = gameboard.addSnake(6, 6, 1); //TEMP?
                     started = true;
                 }
                 
@@ -99,16 +100,16 @@ public class ClientScreen extends JPanel implements KeyListener {
         if(!started) return;
         int keyCode = e.getKeyCode();
         if(keyCode == 39) {
-            gameboard.right();
+            gameboard.right(id);
         }
         if(keyCode == 37) {
-            gameboard.left();
+            gameboard.left(id);
         }
         if(keyCode == 38) {
-            gameboard.up();
+            gameboard.up(id);
         }
         if(keyCode == 40) {
-            gameboard.down();
+            gameboard.down(id);
         }
     } 
 
