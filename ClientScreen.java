@@ -27,7 +27,7 @@ public class ClientScreen extends JPanel implements KeyListener {
         setFocusable(true);
         gameboard = new Game(50);
         started = false;
-        gameboard.addSnake(6, 6);
+        // gameboard.addSnake(6, 6);
         setFocusable(true);
         addKeyListener(this);
 

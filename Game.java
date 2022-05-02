@@ -12,22 +12,16 @@ public class Game {
         this.map = map;
         splitChar = " ";
         splitLine = "|";
-<<<<<<< HEAD
         snakeNum = 0;
         snakes = new CAL<CAL<Tail>>();
-=======
->>>>>>> refs/remotes/origin/main
     }
 
     public Game(int size) {
         map = new char[size][size];
         splitChar = " ";
         splitLine = "|";
-<<<<<<< HEAD
         snakeNum = 0;
         snakes = new CAL<CAL<Tail>>();
-=======
->>>>>>> refs/remotes/origin/main
     }
 
     public void set(String comp) {
@@ -67,24 +61,8 @@ public class Game {
         System.out.println();
     }
 
-<<<<<<< HEAD
     public void addSnake() {
         snakes.add(new CAL<Tail>());
-=======
-    public char[][] getArr() {
-        return map;
-    }
-
-    //Slightly buzzin at the moment
-    public void addSnake(int x, int y) {
-        snake = new CAL<Tail>();
-        snake.add(new Tail(null, 2, x, y));
-        map[x][y] = '0';
-        for(int i = x-1; i > x-5; i--) {
-            snake.add(new Tail(snake.get(snake.size()-1), -1, i, y));
-            map[i][y] = '0';
-        }
->>>>>>> refs/remotes/origin/main
     }
 
     //Also slightly buzzin at the moment
