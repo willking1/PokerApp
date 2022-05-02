@@ -27,12 +27,7 @@ public class ClientScreen extends JPanel implements KeyListener {
         setFocusable(true);
         gameboard = new Game(50);
         started = false;
-        // gameboard.addSnake();
-        // for(int i = 0; i < gameboard.getArr().length; i++) {
-        //     for(int j = 0; j < gameboard.getArr()[0].length; j++) {
-        //         System.out.print(gameboard.getArr()[i][j] + " ");
-        //     } System.out.println();
-        // }
+        gameboard.addSnake(6, 6);
         setFocusable(true);
         addKeyListener(this);
 
@@ -94,7 +89,7 @@ public class ClientScreen extends JPanel implements KeyListener {
 
             repaint();
 
-            try { Thread.sleep(100); } catch (Exception e) { System.out.println(e); }; //SLEEP
+            try { Thread.sleep(1000); } catch (Exception e) { System.out.println(e); }; //SLEEP
         }
     }
 
