@@ -6,12 +6,14 @@ public class Game {
     private char[][] map;
     private String splitChar, splitLine;
     private int dir;
+    private CAL<CAL<Tail>> snakes;
 
     public Game(char[][] map) {
         this.map = map;
         splitChar = " ";
         splitLine = "|";
         snakeNum = 0;
+        snakes = new CAL<CAL<Tail>>();
     }
 
     public Game(int size) {
@@ -19,6 +21,7 @@ public class Game {
         splitChar = " ";
         splitLine = "|";
         snakeNum = 0;
+        snakes = new CAL<CAL<Tail>>();
     }
 
     public void set(String comp) {
@@ -58,15 +61,8 @@ public class Game {
         System.out.println();
     }
 
-    public char[][] getArr() {
-        return map;
-    }
-    
-    public int[] getNext(int x, int y) {
-        if(map[x][y]==map[x+1][y]) return new int[]{x+1, y};
-        else if(map[x][y]==map[x-1][y]) return new int[]{x-1, y};
-        else if(map[x][y]==map[x][y+1]) return new int[]{x, y+1};
-        else return new int[]{x, y-1};
+    public void addSnake() {
+        snakes.add(new CAL<Tail>());
     }
 
     public void move() {
@@ -87,5 +83,9 @@ public class Game {
 
     public void up() {
   
+    }
+
+    public char[][] getArr() {
+        return map;
     }
 }

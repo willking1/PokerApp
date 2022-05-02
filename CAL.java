@@ -3,6 +3,7 @@ public class CAL <V> {
     private FakeGeneric[] list;
 
     public CAL() {
+
         list = new FakeGeneric[0];
     }
 
