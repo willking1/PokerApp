@@ -84,7 +84,7 @@ public class ClientScreen extends JPanel implements KeyListener {
                 String input = in.readLine();
                 gameboard.set(input);
                 if(!started) {
-                    gameboard.addSnake(); //TEMP?
+                    // gameboard.addSnake(14, 10, "left"); //TEMP?
                     started = true;
                 }
                 

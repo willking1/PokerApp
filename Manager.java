@@ -2,13 +2,13 @@ import java.io.*;
 
 public class Manager {
     
-    private ServerThread[] clients;
+    private CAL<ServerThread> clients;
     private int mapSize;
     private String mapID;
 
     public Manager() {
 
-        clients = new ServerThread[0];
+        clients = new CAL<ServerThread>();
         mapSize = 50;
         mapID = "Map1";
     }
@@ -39,26 +39,21 @@ public class Manager {
     }
 
     public void add(ServerThread sT) {
-        ServerThread[] newClients = new ServerThread[clients.length+1];
-        for(int i=0; i<clients.length; i++) {
-            newClients[i] = clients[i];
-        }
-        newClients[newClients.length-1] = sT;
-        clients = newClients;
+        clients.add(sT);
     }
 
     public void broadcast(String msg) {
-        for(int i=0; i<clients.length; i++) {
-            clients[i].send(msg);
+        for(int i=0; i<clients.size(); i++) {
+            clients.get(i).send(msg);
         }
     }
 
     public int size() {
-        return clients.length;
+        return clients.size();
     }
 
     public void checkStart() { //temp
-        if(clients.length >= 1) {
+        if(clients.size() >= 1) {
             startGame();
         }
     }
