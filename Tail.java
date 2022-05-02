@@ -14,7 +14,7 @@ public class Tail {
         this.posY = posY;
     }
 
-    public void drawMe(Graphics g) {}
+    public void drawMe(Graphics g) {} //should we draw here?
 
     public void move() {
         if(dir == -1) {

@@ -64,7 +64,7 @@ public class ClientScreen extends JPanel implements KeyListener {
                     } 
                 }
             }
-            gameboard.move(); //TODO: patch out of bounds
+            // gameboard.move(); //TODO: patch out of bounds
         }
         
 	}
@@ -85,6 +85,8 @@ public class ClientScreen extends JPanel implements KeyListener {
                 }
                 
             } catch (Exception e) {System.out.println(e);}
+
+            gameboard.move();
 
             out.println(gameboard.compress());
 
