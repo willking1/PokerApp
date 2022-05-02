@@ -13,6 +13,7 @@ public class Tail {
         this.dir = dir;
         this.posX = posX;
         this.posY = posY;
+        System.out.println(toString());
     }
 
     public void drawMe(Graphics g) {} //should we draw here?
@@ -39,5 +40,9 @@ public class Tail {
     public int getY() {return posY;}
     public int getDir() {return dir;}
     public void setDir(int dir) {this.dir = dir;}
+
+    public String toString() {
+        return posX + " " + posY;
+    }
 
 }

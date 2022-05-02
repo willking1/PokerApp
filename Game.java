@@ -82,7 +82,7 @@ public class Game {
                 newY = startY+i;
             }
             map[newX][newY] = Character.forDigit(ind,10);
-            snakes.get(ind).add(new Tail(snakes.get(ind).get(i-1), -1, startX, startY));
+            snakes.get(ind).add(new Tail(snakes.get(ind).get(i-1), -1, newX, newY));
         }
         return ind; //returns client id
     }
@@ -91,12 +91,13 @@ public class Game {
     public void move() {
         for(int i=0; i<snakes.size(); i++) {
             //get each snake here
+            map[snakes.get(i).get(snakes.get(i).size()-1).getX()][snakes.get(i).get(snakes.get(i).size()-1).getY()] = '+';
             for(int j=0; j<snakes.get(i).size(); j++) {
                 //moves each tail node
-                map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = '+';
+                
                 snakes.get(i).get(j).move();
-                map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = Character.forDigit(i,10);
             }
+            map[snakes.get(i).get(0).getX()][snakes.get(i).get(0).getY()] = Character.forDigit(i,10);
         }
     }
 
