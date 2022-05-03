@@ -7,6 +7,7 @@ public class Game {
     private String splitChar, splitLine;
     private CAL<Integer> dirs;
     private CAL<CAL<Tail>> snakes;
+    private CAL<PowerUp> blocks;
 
     public Game(char[][] map) {
         this.map = map;
@@ -15,6 +16,7 @@ public class Game {
         startCount = 4;
         snakes = new CAL<CAL<Tail>>();
         dirs = new CAL<Integer>();
+        blocks = new CAL<PowerUp>();
     }
 
     public Game(int size) {
@@ -24,12 +26,12 @@ public class Game {
         startCount = 4;
         snakes = new CAL<CAL<Tail>>();
         dirs = new CAL<Integer>();
+        blocks = new CAL<PowerUp>();
     }
 
     public void set(String comp) {
         int x = 0;
         int y = 0;
-
         for(int i=0; i<comp.length(); i++) {
             char c = comp.charAt(i);
             if(c+"" == splitChar) continue;
@@ -40,6 +42,17 @@ public class Game {
                 map[x][y] = c;
             }
         }
+    }
+
+    public void addBlock() {
+        int x = (int)(Math.random()*map.length); ;
+        int y = (int)(Math.random()*map[0].length); ;
+        while(map[x][y] != '+') {
+            x = (int)(Math.random()*map.length); 
+            y = (int)(Math.random()*map[0].length); 
+        }
+        blocks.add(new PowerUp(x, y));
+        map[x][y] = 'X';
     }
 
     public String compress() {
@@ -63,11 +76,29 @@ public class Game {
         System.out.println();
     }
 
+    public void addSnakeBlock(CAL<Tail> snake, char color) {
+        Tail tail = snake.get(snake.size()-1);
+        //bases where the block gets added by the position of the block after the tail
+        if(tail.next().getX()==tail.getX()+1) {
+            snake.add(new Tail(tail, -1, tail.getX()-1, tail.getY()));
+            map[tail.getX()-1][tail.getY()] = color;
+        } else if(tail.next().getX()==tail.getX()-1) {
+            snake.add(new Tail(tail, -1, tail.getX()+1, tail.getY()));
+            map[tail.getX()+1][tail.getY()] = color;
+        } else if(tail.next().getY()==tail.getY()+1) {
+            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()-1));
+            map[tail.getX()][tail.getY()-1] = color;
+        } else {
+            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()+1));
+            map[tail.getX()][tail.getY()+1] = color;
+        }
+    }
+
     public int addSnake(int startX, int startY, int dir) {
         int ind = snakes.size();
         snakes.add(new CAL<Tail>());
         snakes.get(ind).add(new Tail(null, dir, startX, startY));
-        map[startX][startY] = Character.forDigit(ind,10);
+        map[startX][startY] = Character.forDigit(ind, 10);
         for(int i=1; i<startCount; i++) {
             int newX, newY;
             newX = startX;
@@ -81,7 +112,7 @@ public class Game {
             } else {
                 newY = startY+i;
             }
-            map[newX][newY] = Character.forDigit(ind,10);
+            map[newX][newY] = Character.forDigit(ind, 10);
             snakes.get(ind).add(new Tail(snakes.get(ind).get(i-1), -1, newX, newY));
         }
         dirs.add(dir);
@@ -96,13 +127,20 @@ public class Game {
             map[snakes.get(i).get(snakes.get(i).size()-1).getX()][snakes.get(i).get(snakes.get(i).size()-1).getY()] = '+';
             for(int j = snakes.get(i).size()-1; j >= 0; j--) {
                 snakes.get(i).get(j).move();
+                if(j == 0) {
+                    //Check to see if the new head position is on one of the food blocks
+                    for(int k = 0; k < blocks.size(); k++)  {
+                        if(blocks.get(k).getX() == snakes.get(i).get(j).getX() && blocks.get(k).getY() == snakes.get(i).get(j).getY()) {
+                            addSnakeBlock(snakes.get(i), blocks.get(k).getColor());
+                        }
+                    }
+                }
                 map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = Character.forDigit(i,10);
             } System.out.println();
 
         }
     }
-
-    /* WHO THE FUCK ONE INDEXED THIS
+    /* 
     dir 1 = left
     dir 2 = right
     dir 3 = up

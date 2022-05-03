@@ -35,6 +35,7 @@ public class Tail {
         }
     }
 
+    public Tail next() {return next;}
     public int getX() {return posX;}
     public int getY() {return posY;}
     public int getDir() {return dir;}

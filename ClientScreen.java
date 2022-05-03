@@ -47,7 +47,7 @@ public class ClientScreen extends JPanel implements KeyListener {
         if(started) {
 
             char[][] currState = gameboard.getArr();
-            g.drawRect(20, 20, 18*20, 18*20); //border
+            // g.drawRect(20, 20, 18*20, 18*20); //border
             for(int i = 0; i < currState.length; i++) {
                 for(int j = 0; j < currState[0].length; j++) {
                     // g.drawRect(20+i*(width), 20+j*(10), (width), (width));
@@ -62,6 +62,21 @@ public class ClientScreen extends JPanel implements KeyListener {
                         g.fillRect(21+i*(width), 21+j*(width), (width), (width));
                         g.setColor(Color.BLACK);
                     } 
+                    if(currState[i][j] == 'R') {
+                        g.setColor(Color.RED);
+                        g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                        g.setColor(Color.BLACK);
+                    }
+                    if(currState[i][j] == 'B') {
+                        g.setColor(Color.BLUE);
+                        g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                        g.setColor(Color.BLACK);
+                    }
+                    if(currState[i][j] == 'P') {
+                        g.setColor(Color.MAGENTA);
+                        g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                        g.setColor(Color.BLACK);
+                    }   
                 }
             }
             // gameboard.move(); //TODO: patch out of bounds
@@ -74,6 +89,8 @@ public class ClientScreen extends JPanel implements KeyListener {
 	}
 
     public void poll() throws IOException {
+        //every 15 loops it will add a new block
+        int counter = 0;
         while(true) {
             //check if new board is available or dehang?
             try {
@@ -83,7 +100,6 @@ public class ClientScreen extends JPanel implements KeyListener {
                     id = gameboard.addSnake(6, 6, 1); //TEMP?
                     started = true;
                 }
-                
             } catch (Exception e) {System.out.println(e);}
 
             gameboard.move();
@@ -91,8 +107,12 @@ public class ClientScreen extends JPanel implements KeyListener {
             out.println(gameboard.compress());
 
             repaint();
-
-            try { Thread.sleep(1000); } catch (Exception e) { System.out.println(e); }; //SLEEP
+            if(counter == 15) {
+                gameboard.addBlock();
+                counter = 0;
+            }
+            try { Thread.sleep(100); } catch (Exception e) { System.out.println(e); }; //SLEEP
+            counter++;
         }
     }
 
