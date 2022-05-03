@@ -5,7 +5,7 @@ public class Game {
     private int startCount;
     private char[][] map;
     private String splitChar, splitLine;
-    private CAL<Integer> dirs;
+    private CAL<String> dirs;
     private CAL<CAL<Tail>> snakes;
     private CAL<PowerUp> blocks;
 
@@ -15,7 +15,7 @@ public class Game {
         splitLine = "|";
         startCount = 4;
         snakes = new CAL<CAL<Tail>>();
-        dirs = new CAL<Integer>();
+        dirs = new CAL<String>();
         blocks = new CAL<PowerUp>();
     }
 
@@ -25,7 +25,7 @@ public class Game {
         splitLine = "|";
         startCount = 4;
         snakes = new CAL<CAL<Tail>>();
-        dirs = new CAL<Integer>();
+        dirs = new CAL<String>();
         blocks = new CAL<PowerUp>();
     }
 
@@ -94,7 +94,8 @@ public class Game {
         }
     }
 
-    public int addSnake(int startX, int startY, int dir) {
+    public int addSnake(int startX, int startY, String d) {
+        int dir = Integer.parseInt(d);
         int ind = snakes.size();
         snakes.add(new CAL<Tail>());
         snakes.get(ind).add(new Tail(null, dir, startX, startY));
@@ -115,7 +116,9 @@ public class Game {
             map[newX][newY] = Character.forDigit(ind, 10);
             snakes.get(ind).add(new Tail(snakes.get(ind).get(i-1), -1, newX, newY));
         }
-        dirs.add(dir);
+
+        System.out.println(startX + " " + startY);
+        dirs.add(d);
         return ind; //returns client id
     }
 
@@ -123,7 +126,8 @@ public class Game {
     public void move() {
         for(int i=0; i<snakes.size(); i++) {
             //get each snake here 
-            snakes.get(i).get(0).setDir(dirs.get(i)); //set direction of head
+
+            snakes.get(i).get(0).setDir(Integer.parseInt(dirs.get(i))); //set direction of head - dirs is 0
             map[snakes.get(i).get(snakes.get(i).size()-1).getX()][snakes.get(i).get(snakes.get(i).size()-1).getY()] = '+';
             for(int j = snakes.get(i).size()-1; j >= 0; j--) {
                 snakes.get(i).get(j).move();
@@ -136,7 +140,7 @@ public class Game {
                     }
                 }
                 map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = Character.forDigit(i,10);
-            } System.out.println();
+            }
 
         }
     }
@@ -147,19 +151,19 @@ public class Game {
     dir 4 = down
     */
     public void left(int id) {
-        dirs.set(id, dirs.get(id)!=2 ? 1 : 2);
+        dirs.set(id, Integer.parseInt(dirs.get(id))!=2 ? 1+"" : 2+"");
     }
 
     public void right(int id) {
-        dirs.set(id, dirs.get(id)!=1 ? 2 : 1);
+        dirs.set(id, Integer.parseInt(dirs.get(id))!=1 ? 2+"" : 1+"");
     }
 
     public void down(int id) {
-        dirs.set(id, dirs.get(id)!=3 ? 4 : 3);
+        dirs.set(id, Integer.parseInt(dirs.get(id))!=3 ? 4+"" : 3+"");
     }
 
     public void up(int id) {
-        dirs.set(id, dirs.get(id)!=4 ? 3 : 4);
+        dirs.set(id, Integer.parseInt(dirs.get(id))!=4 ? 3+"" : 4+"");
     }
 
     public char[][] getArr() {

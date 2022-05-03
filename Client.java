@@ -12,7 +12,6 @@ public class Client {
 		frame.pack();
 		frame.setVisible(true);
 		sc.poll(); //WHY GOD WHY HANG ME NOT THE CODE
-		System.out.println("called"); // will never run?
 		//code after one while loop is unreachable...
     }
 }

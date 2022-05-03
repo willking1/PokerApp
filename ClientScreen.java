@@ -79,7 +79,6 @@ public class ClientScreen extends JPanel implements KeyListener {
                     }   
                 }
             }
-            // gameboard.move(); //TODO: patch out of bounds
         }
         
 	}
@@ -95,24 +94,16 @@ public class ClientScreen extends JPanel implements KeyListener {
             //check if new board is available or dehang?
             try {
                 String input = in.readLine();
-                gameboard.set(input);
+                gameboard.set(input); //not error
                 if(!started) {
-                    id = gameboard.addSnake(6, 6, 1); //TEMP?
+                    out.println("init 20 20 2");
+                    // id = Integer.parseInt(in.readLine()); //error here - taking in gameobject again...
                     started = true;
                 }
-            } catch (Exception e) {System.out.println(e);}
+            } catch (Exception e) {System.out.println("check"); System.out.println(e.getMessage()); break;} //breaking first time?
 
-            gameboard.move();
-
-            out.println(gameboard.compress());
-
-            repaint();
-            if(counter == 15) {
-                gameboard.addBlock();
-                counter = 0;
-            }
-            try { Thread.sleep(100); } catch (Exception e) { System.out.println(e); }; //SLEEP
-            counter++;
+           repaint();
+           counter++;
         }
     }
 
@@ -122,17 +113,18 @@ public class ClientScreen extends JPanel implements KeyListener {
         if(!started) return;
         int keyCode = e.getKeyCode();
         if(keyCode == 39) {
-            gameboard.right(id);
+            out.println("move 2");
         }
         if(keyCode == 37) {
-            gameboard.left(id);
+            out.println("move 1");
         }
         if(keyCode == 38) {
-            gameboard.up(id);
+            out.println("move 3");
         }
         if(keyCode == 40) {
-            gameboard.down(id);
+            out.println("move 4");
         }
+        out.flush();
     } 
 
     public void keyReleased(KeyEvent e) {}
