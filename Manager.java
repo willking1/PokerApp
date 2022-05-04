@@ -36,7 +36,6 @@ public class Manager {
             br.close();
 
             game = new Game(map);
-
             broadcast(game.compress());
             // play();
             start();
@@ -91,9 +90,12 @@ public class Manager {
     public void play() {
 
         while(true) {
-
             if(clients.size() != target) continue;
-
+            // for(char[] ca : game.getArr()) {
+            //     for(char c : ca) {
+            //         System.out.print(c + " ");
+            //     } System.out.println();
+            // }
             game.move();
             broadcast(game.compress());
             try { Thread.sleep(2000); } catch (Exception e) { System.out.println(e); }; //SLEEP

@@ -34,12 +34,13 @@ public class Game {
         int y = 0;
         for(int i=0; i<comp.length(); i++) {
             char c = comp.charAt(i);
-            if(c+"" == splitChar) continue;
-            if(c+"" == splitLine) {
+            if((c+"").equals(splitChar)) continue;
+            if((c+"").equals(splitLine)) {
                 y++;
                 x = 0;
             } else {
                 map[x][y] = c;
+                x++;
             }
         }
     }

@@ -77,7 +77,7 @@ public class ClientScreen extends JPanel implements KeyListener {
                         g.fillRect(21+i*(width), 21+j*(width), (width), (width));
                         g.setColor(Color.BLACK);
                     }   
-                }
+                } 
             }
         }
         
@@ -89,21 +89,23 @@ public class ClientScreen extends JPanel implements KeyListener {
 
     public void poll() throws IOException {
         //every 15 loops it will add a new block
-        int counter = 0;
         while(true) {
             //check if new board is available or dehang?
             try {
                 String input = in.readLine();
                 gameboard.set(input); //not error
                 if(!started) {
-                    out.println("init 20 20 2");
-                    // id = Integer.parseInt(in.readLine()); //error here - taking in gameobject again...
+                    out.println("init 5 5 2"); 
+                    String idStr = in.readLine();
+                    while(!Character.isDigit(idStr.charAt(0))) {
+                        idStr = in.readLine();
+                    }
+                    id = Integer.valueOf(idStr); 
                     started = true;
                 }
             } catch (Exception e) {System.out.println("check"); System.out.println(e.getMessage()); break;} //breaking first time?
 
            repaint();
-           counter++;
         }
     }
 
@@ -113,16 +115,16 @@ public class ClientScreen extends JPanel implements KeyListener {
         if(!started) return;
         int keyCode = e.getKeyCode();
         if(keyCode == 39) {
-            out.println("move 2");
+            out.println("move 4");
         }
         if(keyCode == 37) {
-            out.println("move 1");
-        }
-        if(keyCode == 38) {
             out.println("move 3");
         }
+        if(keyCode == 38) {
+            out.println("move 1");
+        }
         if(keyCode == 40) {
-            out.println("move 4");
+            out.println("move 2");
         }
         out.flush();
     } 
