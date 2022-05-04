@@ -95,9 +95,25 @@ public class ClientScreen extends JPanel implements KeyListener {
                 String input = in.readLine();
                 gameboard.set(input); //not error
                 if(!started) {
-                    Scanner inp = new Scanner(System.in);
-                    String next = inp.nextLine();
-                    out.println(next); 
+                    int x, y, dir;
+                    if(id == 0) {
+                        x = 3;
+                        y = 3;
+                        dir = 2;
+                    } else if(id == 1) {
+                        x = 20;
+                        y = 3;
+                        dir = 2;
+                    } else if(id == 2) {
+                        x = 3;
+                        y = 20;
+                        dir = 1;
+                    } else {
+                        x = 20;
+                        y = 20;
+                        dir = 1;
+                    }
+                    out.println("init " + x + " " + y + " " + dir); 
                     String idStr = in.readLine();
                     while(!Character.isDigit(idStr.charAt(0))) {
                         idStr = in.readLine();
