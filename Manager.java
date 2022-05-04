@@ -13,7 +13,7 @@ public class Manager {
         clients = new CAL<ServerThread>();
         mapSize = 50;
         mapID = "Map1";
-        target = 1;
+        target = 2;
 
     }
 
@@ -58,7 +58,9 @@ public class Manager {
     }
 
     public void start() {
-        play();
+        if(clients.size() == target) {
+            play();
+        }
     }
 
     public int size() {
@@ -88,17 +90,16 @@ public class Manager {
     }
 
     public void play() {
-
+        int counter = 0;
         while(true) {
-            if(clients.size() != target) continue;
-            // for(char[] ca : game.getArr()) {
-            //     for(char c : ca) {
-            //         System.out.print(c + " ");
-            //     } System.out.println();
-            // }
+            counter++;
             game.move();
+            if(counter == 5) {
+                game.addBlock();
+                counter = 0;
+            }
             broadcast(game.compress());
-            try { Thread.sleep(2000); } catch (Exception e) { System.out.println(e); }; //SLEEP
+            try { Thread.sleep(1000); } catch (Exception e) { System.out.println(e); }; //SLEEP
         }
     }
 

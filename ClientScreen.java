@@ -2,6 +2,7 @@ import javax.swing.JPanel;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
@@ -80,7 +81,6 @@ public class ClientScreen extends JPanel implements KeyListener {
                 } 
             }
         }
-        
 	}
 
 	public Dimension getPreferredSize() {
@@ -95,7 +95,9 @@ public class ClientScreen extends JPanel implements KeyListener {
                 String input = in.readLine();
                 gameboard.set(input); //not error
                 if(!started) {
-                    out.println("init 5 5 2"); 
+                    Scanner inp = new Scanner(System.in);
+                    String next = inp.nextLine();
+                    out.println(next); 
                     String idStr = in.readLine();
                     while(!Character.isDigit(idStr.charAt(0))) {
                         idStr = in.readLine();
