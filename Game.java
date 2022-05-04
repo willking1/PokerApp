@@ -125,9 +125,10 @@ public class Game {
 
     //Also slightly buzzin at the moment
     public void move() {
+        //move the snakes
         for(int i=0; i<snakes.size(); i++) {
             //get each snake here 
-
+            if(snakes.get(i).size() == 0) continue;
             snakes.get(i).get(0).setDir(Integer.parseInt(dirs.get(i))); //set direction of head - dirs is 0
             map[snakes.get(i).get(snakes.get(i).size()-1).getX()][snakes.get(i).get(snakes.get(i).size()-1).getY()] = '+';
             for(int j = snakes.get(i).size()-1; j >= 0; j--) {
@@ -142,8 +143,31 @@ public class Game {
                 }
                 map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = Character.forDigit(i,10);
             }
-
         }
+
+        //check for collision
+        for(int i=0; i<snakes.size(); i++) {
+            if(checkCollision(i)) {
+                for(int j=1; j<snakes.get(i).size(); j++) {
+                    map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = '+';
+                }
+                snakes.set(i, new CAL<Tail>());
+            }
+        }
+    }
+
+    public boolean checkCollision(int index) {
+        Tail head = snakes.get(index).get(0);
+        for(int i=0; i<snakes.size(); i++) {
+            if(i == index) continue;
+            for(int j=0; j<snakes.get(i).size(); j++) {
+                if(head.getX() == snakes.get(i).get(j).getX() && head.getY() == snakes.get(i).get(j).getY()) {
+                    //collision detected
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     /* 
     dir 1 = left
