@@ -81,16 +81,16 @@ public class Game {
         Tail tail = snake.get(snake.size()-1);
         //bases where the block gets added by the position of the block after the tail
         if(tail.next().getX()==tail.getX()+1) {
-            snake.add(new Tail(tail, -1, tail.getX()-1, tail.getY()));
+            snake.add(new Tail(tail, -1, tail.getX()-1, tail.getY(), map));
             map[tail.getX()-1][tail.getY()] = color;
         } else if(tail.next().getX()==tail.getX()-1) {
-            snake.add(new Tail(tail, -1, tail.getX()+1, tail.getY()));
+            snake.add(new Tail(tail, -1, tail.getX()+1, tail.getY(), map));
             map[tail.getX()+1][tail.getY()] = color;
         } else if(tail.next().getY()==tail.getY()+1) {
-            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()-1));
+            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()-1, map));
             map[tail.getX()][tail.getY()-1] = color;
         } else {
-            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()+1));
+            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()+1, map));
             map[tail.getX()][tail.getY()+1] = color;
         }
     }
@@ -99,7 +99,7 @@ public class Game {
         int dir = Integer.parseInt(d);
         int ind = snakes.size();
         snakes.add(new CAL<Tail>());
-        snakes.get(ind).add(new Tail(null, dir, startX, startY));
+        snakes.get(ind).add(new Tail(null, dir, startX, startY, map));
         map[startX][startY] = Character.forDigit(ind, 10);
         for(int i=1; i<startCount; i++) {
             int newX, newY;
@@ -115,7 +115,7 @@ public class Game {
                 newY = startY+i;
             }
             map[newX][newY] = Character.forDigit(ind, 10);
-            snakes.get(ind).add(new Tail(snakes.get(ind).get(i-1), -1, newX, newY));
+            snakes.get(ind).add(new Tail(snakes.get(ind).get(i-1), -1, newX, newY, map));
         }
 
         System.out.println(startX + " " + startY);
@@ -132,7 +132,9 @@ public class Game {
             snakes.get(i).get(0).setDir(Integer.parseInt(dirs.get(i))); //set direction of head - dirs is 0
             map[snakes.get(i).get(snakes.get(i).size()-1).getX()][snakes.get(i).get(snakes.get(i).size()-1).getY()] = '+';
             for(int j = snakes.get(i).size()-1; j >= 0; j--) {
-                snakes.get(i).get(j).move();
+                if(snakes.get(i).get(j).move() == -1) {
+                    kill(i);
+                }
                 if(j == 0) {
                     //Check to see if the new head position is on one of the food blocks
                     for(int k = 0; k < blocks.size(); k++)  {
@@ -148,12 +150,16 @@ public class Game {
         //check for collision
         for(int i=0; i<snakes.size(); i++) {
             if(checkCollision(i)) {
-                for(int j=1; j<snakes.get(i).size(); j++) {
-                    map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = '+';
-                }
-                snakes.set(i, new CAL<Tail>());
+                kill(i);
             }
         }
+    }
+
+    public void kill(int i) {
+        for(int j=1; j<snakes.get(i).size(); j++) {
+            map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = '+';
+        }
+        snakes.set(i, new CAL<Tail>());
     }
 
     public boolean checkCollision(int index) {

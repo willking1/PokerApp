@@ -34,9 +34,10 @@ public class Manager {
                 i++;
             }
             br.close();
-
             game = new Game(map);
             broadcast(game.compress());
+            broadcast(target+"");
+            broadcast(clients.size()+"");
             // play();
             start();
 

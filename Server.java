@@ -25,11 +25,7 @@ public class Server {
             System.out.println("\nCurrent clients: " + manager.size());
 
             // manager.broadcast("test");
-            
-            manager.checkStart(); //temp
-
+            manager.checkStart();
         }
-
-
     }
 }

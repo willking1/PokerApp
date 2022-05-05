@@ -95,36 +95,49 @@ public class ClientScreen extends JPanel implements KeyListener {
                 String input = in.readLine();
                 gameboard.set(input); //not error
                 if(!started) {
-                    int x, y, dir;
-                    if(id == 0) {
-                        x = 3;
-                        y = 3;
-                        dir = 2;
-                    } else if(id == 1) {
-                        x = 20;
-                        y = 3;
-                        dir = 2;
-                    } else if(id == 2) {
-                        x = 3;
-                        y = 20;
-                        dir = 1;
-                    } else {
-                        x = 20;
-                        y = 20;
-                        dir = 1;
+                    int target = Integer.valueOf(in.readLine());
+                    int size = Integer.valueOf(in.readLine());
+                    int id = size-1;
+                    //waits for all the clients to connect before calling addSnake
+                    while(size < target) {
+                        String sizeStr = in.readLine();
+                        size = Character.isDigit(sizeStr.charAt(0)) ? Integer.valueOf(sizeStr) : -1;
+                        System.out.println(size);
                     }
-                    out.println("init " + x + " " + y + " " + dir); 
+                    //Prints the init statement to the serverthread which uses the id to know where to spawn the snake
+                    addSnake(id);
                     String idStr = in.readLine();
                     while(!Character.isDigit(idStr.charAt(0))) {
                         idStr = in.readLine();
                     }
-                    id = Integer.valueOf(idStr); 
+                    id = Integer.valueOf(idStr);
                     started = true;
                 }
-            } catch (Exception e) {System.out.println("check"); System.out.println(e.getMessage()); break;} //breaking first time?
-
+            } catch (Exception e) {System.out.println("check"); System.out.println(e.getMessage()); break;} 
            repaint();
         }
+    }
+
+    public void addSnake(int id) {
+        int x, y, dir;
+        if(id == 0) {
+            x = 3;
+            y = 3;
+            dir = 2;
+        } else if(id == 1) {
+            x = 20;
+            y = 3;
+            dir = 2;
+        } else if(id == 2) {
+            x = 3;
+            y = 20;
+            dir = 1;
+        } else {
+            x = 20;
+            y = 20;
+            dir = 1;
+        }
+        out.println("init " + x + " " + y + " " + dir); 
     }
 
     public void keyTyped(KeyEvent e) {}
