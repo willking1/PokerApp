@@ -77,7 +77,11 @@ public class ClientScreen extends JPanel implements KeyListener {
                         g.setColor(Color.MAGENTA);
                         g.fillRect(21+i*(width), 21+j*(width), (width), (width));
                         g.setColor(Color.BLACK);
-                    }   
+                    }
+                    if(currState[i][j] == '#') {
+                        g.setColor(Color.BLACK);
+                        g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    }
                 } 
             }
         }
@@ -121,15 +125,15 @@ public class ClientScreen extends JPanel implements KeyListener {
     public void addSnake(int id) {
         int x, y, dir;
         if(id == 0) {
-            x = 3;
-            y = 3;
+            x = 4;
+            y = 4;
             dir = 2;
         } else if(id == 1) {
             x = 20;
-            y = 3;
+            y = 4;
             dir = 2;
         } else if(id == 2) {
-            x = 3;
+            x = 4;
             y = 20;
             dir = 1;
         } else {

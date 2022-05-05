@@ -1,9 +1,8 @@
-import java.io.*;
-
 public class Game {
 
     private int startCount;
     private char[][] map;
+    private char[][] wallMap;
     private String splitChar, splitLine;
     private CAL<String> dirs;
     private CAL<CAL<Tail>> snakes;
@@ -17,6 +16,16 @@ public class Game {
         snakes = new CAL<CAL<Tail>>();
         dirs = new CAL<String>();
         blocks = new CAL<PowerUp>();
+        cloneMap();
+    }
+
+    private void cloneMap() {
+        wallMap = new char[map.length][map[0].length];
+        for(int i=0; i<map.length; i++) {
+            for(int j=0; j<map.length; j++) {
+                wallMap[i][j] = map[i][j];
+            }
+        }
     }
 
     public Game(int size) {
@@ -27,6 +36,7 @@ public class Game {
         snakes = new CAL<CAL<Tail>>();
         dirs = new CAL<String>();
         blocks = new CAL<PowerUp>();
+        cloneMap();
     }
 
     public void set(String comp) {
@@ -65,16 +75,6 @@ public class Game {
             s += splitLine;
         }
         return s.substring(0, s.length()-2);
-    }
-
-    public void print() {
-        for(int i=0; i<map.length; i++) {
-            System.out.println();
-            for(int j=0; j<map[i].length; j++) {
-                System.out.print(map[i][j] + " ");
-            }
-        }
-        System.out.println();
     }
 
     public void addSnakeBlock(CAL<Tail> snake, char color) {
@@ -132,10 +132,11 @@ public class Game {
             snakes.get(i).get(0).setDir(Integer.parseInt(dirs.get(i))); //set direction of head - dirs is 0
             map[snakes.get(i).get(snakes.get(i).size()-1).getX()][snakes.get(i).get(snakes.get(i).size()-1).getY()] = '+';
             for(int j = snakes.get(i).size()-1; j >= 0; j--) {
-                if(snakes.get(i).get(j).move() == -1) {
-                    kill(i);
-                }
+                
+                snakes.get(i).get(j).move();
+
                 if(j == 0) {
+
                     //Check to see if the new head position is on one of the food blocks
                     for(int k = 0; k < blocks.size(); k++)  {
                         if(blocks.get(k).getX() == snakes.get(i).get(j).getX() && blocks.get(k).getY() == snakes.get(i).get(j).getY()) {
@@ -149,7 +150,7 @@ public class Game {
 
         //check for collision
         for(int i=0; i<snakes.size(); i++) {
-            if(checkCollision(i)) {
+            if(snakes.get(i).size() != 0 && checkCollision(i)) {
                 kill(i);
             }
         }
@@ -164,10 +165,17 @@ public class Game {
 
     public boolean checkCollision(int index) {
         Tail head = snakes.get(index).get(0);
+
+        if(wallMap[head.getX()][head.getY()] == '#') {
+            map[head.getX()][head.getY()] = '#';
+            return true;
+        }
+
         for(int i=0; i<snakes.size(); i++) {
             if(i == index) continue;
             for(int j=0; j<snakes.get(i).size(); j++) {
-                if(head.getX() == snakes.get(i).get(j).getX() && head.getY() == snakes.get(i).get(j).getY()) {
+
+                if((head.getX() == snakes.get(i).get(j).getX() && head.getY() == snakes.get(i).get(j).getY())) {
                     //collision detected
                     return true;
                 }
