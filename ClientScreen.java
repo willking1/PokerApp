@@ -127,6 +127,11 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
                             g.fillRect(21+i*(width), 21+j*(width), (width), (width));
                             g.setColor(Color.BLACK);
                         } 
+                        if(currState[i][j] == 'G') {
+                            g.setColor(Color.GREEN);
+                            g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                            g.setColor(Color.BLACK);
+                        }
                         if(currState[i][j] == 'R') {
                             g.setColor(Color.RED);
                             g.fillRect(21+i*(width), 21+j*(width), (width), (width));
@@ -239,7 +244,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
         } else if(loc == 2) {
             x = 4;
             y = 20;
-            dir = 1;
+            dir = 2;
         } else {
             x = 30;
             y = 30;

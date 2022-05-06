@@ -99,12 +99,12 @@ public class Manager {
         while(true) {
             counter++;
             game.move();
-            if(counter == 5) {
+            if(counter == 10) {
                 game.addBlock();
                 counter = 0;
             }
             broadcast(game.compress());
-            try { Thread.sleep(1000); } catch (Exception e) { System.out.println(e); }; //SLEEP
+            try { Thread.sleep(100); } catch (Exception e) { System.out.println(e); }; //SLEEP
         }
     }
 

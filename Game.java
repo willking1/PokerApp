@@ -81,16 +81,16 @@ public class Game {
         Tail tail = snake.get(snake.size()-1);
         //bases where the block gets added by the position of the block after the tail
         if(tail.next().getX()==tail.getX()+1) {
-            snake.add(new Tail(tail, -1, tail.getX()-1, tail.getY(), map));
+            snake.add(new Tail(tail, -1, tail.getX()-1, tail.getY(), map, color));
             map[tail.getX()-1][tail.getY()] = color;
         } else if(tail.next().getX()==tail.getX()-1) {
-            snake.add(new Tail(tail, -1, tail.getX()+1, tail.getY(), map));
+            snake.add(new Tail(tail, -1, tail.getX()+1, tail.getY(), map, color));
             map[tail.getX()+1][tail.getY()] = color;
         } else if(tail.next().getY()==tail.getY()+1) {
-            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()-1, map));
+            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()-1, map, color));
             map[tail.getX()][tail.getY()-1] = color;
         } else {
-            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()+1, map));
+            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()+1, map, color));
             map[tail.getX()][tail.getY()+1] = color;
         }
     }
@@ -114,7 +114,7 @@ public class Game {
             } else {
                 newY = startY+i;
             }
-            map[newX][newY] = Character.forDigit(ind, 10);
+            map[newX][newY] = 'G';
             snakes.get(ind).add(new Tail(snakes.get(ind).get(i-1), -1, newX, newY, map));
         }
 
@@ -144,7 +144,7 @@ public class Game {
                         }
                     }
                 }
-                map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = Character.forDigit(i,10);
+                map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = snakes.get(i).get(j).getColor();
             }
         }
 
@@ -172,9 +172,9 @@ public class Game {
         }
 
         for(int i=0; i<snakes.size(); i++) {
-            if(i == index) continue;
+            
             for(int j=0; j<snakes.get(i).size(); j++) {
-
+                if(i == index && j == 0) continue;
                 if((head.getX() == snakes.get(i).get(j).getX() && head.getY() == snakes.get(i).get(j).getY())) {
                     //collision detected
                     return true;
@@ -190,19 +190,23 @@ public class Game {
     dir 4 = down
     */
     public void left(int id) {
-        dirs.set(id, Integer.parseInt(dirs.get(id))!=2 ? 1+"" : 2+"");
+        Tail head = snakes.get(id).get(0);
+        if(head.getX()-1 != snakes.get(id).get(1).getX()) dirs.set(id, Integer.parseInt(dirs.get(id))!=2 ? 1+"" : 2+"");
     }
 
     public void right(int id) {
-        dirs.set(id, Integer.parseInt(dirs.get(id))!=1 ? 2+"" : 1+"");
+        Tail head = snakes.get(id).get(0);
+        if(head.getX()+1 != snakes.get(id).get(1).getX()) dirs.set(id, Integer.parseInt(dirs.get(id))!=1 ? 2+"" : 1+"");
     }
 
     public void down(int id) {
-        dirs.set(id, Integer.parseInt(dirs.get(id))!=3 ? 4+"" : 3+"");
+        Tail head = snakes.get(id).get(0);
+        if(head.getY()+1 != snakes.get(id).get(1).getY()) dirs.set(id, Integer.parseInt(dirs.get(id))!=3 ? 4+"" : 3+"");
     }
 
     public void up(int id) {
-        dirs.set(id, Integer.parseInt(dirs.get(id))!=4 ? 3+"" : 4+"");
+        Tail head = snakes.get(id).get(0);
+        if(head.getY()-1 != snakes.get(id).get(1).getY()) dirs.set(id, Integer.parseInt(dirs.get(id))!=4 ? 3+"" : 4+"");
     }
 
     public char[][] getArr() {
