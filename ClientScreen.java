@@ -45,7 +45,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
         setFocusable(true);
         addKeyListener(this);
 
-        hostName = "10.210.97.91"; 
+        hostName = "localhost"; 
 		portNumber = 96;
 		serverSocket = new Socket(hostName, portNumber);
         in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
@@ -113,46 +113,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
             if(started) {
                 char[][] currState = gameboard.getArr();
                 // g.drawRect(20, 20, 18*20, 18*20); //border
-                for(int i = 0; i < currState.length; i++) {
-                    for(int j = 0; j < currState[0].length; j++) {
-                        // g.drawRect(20+i*(width), 20+j*(10), (width), (width));
-                        if(currState[i][j] == 'X') {
-                            g.setColor(Color.RED);
-                            g.fillRect(21+i*(width), 21+j*(width), (width), (width));
-                            g.setColor(Color.BLACK);
-                        } 
-                        if(Character.isDigit(currState[i][j])) {
-                            Integer.valueOf(currState[i][j]);
-                            g.setColor(Color.GREEN);
-                            g.fillRect(21+i*(width), 21+j*(width), (width), (width));
-                            g.setColor(Color.BLACK);
-                        } 
-                        if(currState[i][j] == 'G') {
-                            g.setColor(Color.GREEN);
-                            g.fillRect(21+i*(width), 21+j*(width), (width), (width));
-                            g.setColor(Color.BLACK);
-                        }
-                        if(currState[i][j] == 'R') {
-                            g.setColor(Color.RED);
-                            g.fillRect(21+i*(width), 21+j*(width), (width), (width));
-                            g.setColor(Color.BLACK);
-                        }
-                        if(currState[i][j] == 'B') {
-                            g.setColor(Color.BLUE);
-                            g.fillRect(21+i*(width), 21+j*(width), (width), (width));
-                            g.setColor(Color.BLACK);
-                        }
-                        if(currState[i][j] == 'P') {
-                            g.setColor(Color.MAGENTA);
-                            g.fillRect(21+i*(width), 21+j*(width), (width), (width));
-                            g.setColor(Color.BLACK);
-                        }
-                        if(currState[i][j] == '#') {
-                            g.setColor(Color.BLACK);
-                            g.fillRect(21+i*(width), 21+j*(width), (width), (width));
-                        }
-                    } 
-                }
+                drawGame(g);
             }
         }
         if(screen == 1) {
@@ -185,9 +146,45 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
         int x = snakes.get(id).get(0).getX();
         int y = snakes.get(id).get(0).getY();
         char[][] currState = gameboard.getArr();
-        for(int i=x; i<x+30; i++) {
-            for(int j=y; j<y+30; j++) {
-                
+        for(int i=x-30; i<x+30; i++) {
+            if(i < 0) continue;
+            for(int j=y-30; j<y+30; j++) {
+                if(j < 0) continue;
+                if(currState[i][j] == 'X') {
+                    g.setColor(Color.RED);
+                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.setColor(Color.BLACK);
+                } 
+                if(Character.isDigit(currState[i][j])) {
+                    Integer.valueOf(currState[i][j]);
+                    g.setColor(Color.GREEN);
+                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.setColor(Color.BLACK);
+                } 
+                if(currState[i][j] == 'G') {
+                    g.setColor(Color.GREEN);
+                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.setColor(Color.BLACK);
+                }
+                if(currState[i][j] == 'R') {
+                    g.setColor(Color.RED);
+                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.setColor(Color.BLACK);
+                }
+                if(currState[i][j] == 'B') {
+                    g.setColor(Color.BLUE);
+                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.setColor(Color.BLACK);
+                }
+                if(currState[i][j] == 'P') {
+                    g.setColor(Color.MAGENTA);
+                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.setColor(Color.BLACK);
+                }
+                if(currState[i][j] == '#') {
+                    g.setColor(Color.BLACK);
+                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                }
             }
         }
     }
