@@ -45,7 +45,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
         setFocusable(true);
         addKeyListener(this);
 
-        hostName = "localhost"; 
+        hostName = "10.210.97.91"; 
 		portNumber = 96;
 		serverSocket = new Socket(hostName, portNumber);
         in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
