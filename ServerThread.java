@@ -40,10 +40,12 @@ public class ServerThread implements Runnable {
                     String[] pos = input.split(" ");
                     id = manager.addSnake(Integer.parseInt(pos[0]), Integer.parseInt(pos[1]), Integer.parseInt(pos[2])); //this line?
                     out.println(id);
-                }
-
+                } else if(prefix.equals("targ")) {
+                    int target = Integer.valueOf(input);
+                    manager.setTarget(target);
+                } 
             } catch (Exception e) {
-               System.out.println("failed st " + input);
+               System.out.println("failed st " + e);
                break;
             }
         }

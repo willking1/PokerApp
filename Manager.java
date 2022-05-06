@@ -13,7 +13,7 @@ public class Manager {
         clients = new CAL<ServerThread>();
         mapSize = 50;
         mapID = "Map1";
-        target = 2;
+        target = -1;
 
     }
 
@@ -37,8 +37,7 @@ public class Manager {
             game = new Game(map);
             broadcast(game.compress());
             broadcast(target+"");
-            broadcast(clients.size()+"");
-            // play();
+            broadcast("S"+clients.size());
             start();
 
         } catch (IOException e) { e.printStackTrace();}
@@ -88,6 +87,11 @@ public class Manager {
 
     public void up(int id) {
         game.up(id);
+    }
+
+    public void setTarget(int target) {
+        this.target = target;
+        broadcast("T" + target);
     }
 
     public void play() {
