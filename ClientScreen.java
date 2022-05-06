@@ -179,6 +179,19 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
         }
 	}
 
+    public void drawGame(Graphics g) {
+        CAL<CAL<Tail>> snakes = gameboard.getSnakes();
+        if(snakes.get(id).size() == 0) return;
+        int x = snakes.get(id).get(0).getX();
+        int y = snakes.get(id).get(0).getY();
+        char[][] currState = gameboard.getArr();
+        for(int i=x; i<x+30; i++) {
+            for(int j=y; j<y+30; j++) {
+                
+            }
+        }
+    }
+
 	public Dimension getPreferredSize() {
 		return new Dimension(1000,1000);
 	}

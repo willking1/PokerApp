@@ -39,6 +39,10 @@ public class Game {
         cloneMap();
     }
 
+    public CAL<CAL<Tail>> getSnakes() {
+        return snakes;
+    }
+
     public void set(String comp) {
         int x = 0;
         int y = 0;
