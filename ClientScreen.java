@@ -17,6 +17,10 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
     private int id;
     private int screen;
     private int target;
+    private boolean spawned;
+    private int positionX;
+    private int positionY;
+    private int gameSize;
 
     //snake - temp?
     private int width;
@@ -29,6 +33,8 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
     private PrintWriter out;
 
     //Graphical Components
+    private int dimensionX;
+    private int dimensionY;
     private JLabel titleLabel;
     private JLabel playerSelect;
     private JButton twoPlayerB;
@@ -37,10 +43,19 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
     private JLabel waitingLabel;
 
 	public ClientScreen() throws IOException {
+
+        dimensionX = 1000;
+        dimensionY = 1000;
+
+        spawned = false;
+        
         id = -1;
 		setLayout(null);
         setFocusable(true);
         gameboard = new Game(50);
+
+        gameSize = 50;
+
         started = false;
         setFocusable(true);
         addKeyListener(this);
@@ -111,8 +126,6 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
             fourPlayerB.setVisible(false);
             waitingLabel.setVisible(false);
             if(started) {
-                char[][] currState = gameboard.getArr();
-                // g.drawRect(20, 20, 18*20, 18*20); //border
                 drawGame(g);
             }
         }
@@ -141,56 +154,68 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
 	}
 
     public void drawGame(Graphics g) {
-        CAL<CAL<Tail>> snakes = gameboard.getSnakes();
-        if(snakes.get(id).size() == 0) return;
-        int x = snakes.get(id).get(0).getX();
-        int y = snakes.get(id).get(0).getY();
+        g.setColor(Color.black);
+        g.fillRect(0, 0, dimensionX, dimensionY);
+        int x = positionY;
+        int y = positionX;
         char[][] currState = gameboard.getArr();
-        for(int i=x-30; i<x+30; i++) {
-            if(i < 0) continue;
-            for(int j=y-30; j<y+30; j++) {
-                if(j < 0) continue;
+        for(int i=x-25; i<x+25; i++) {
+            if(i < 0 || i >= gameSize) continue;
+            for(int j=y-25; j<y+25; j++) {
+                if(j < 0 || j >= gameSize) continue;
+
+                int calcX = 500+(i-x)*(width);
+                int calcY = 500+(j-y)*(width);
+
+                if(calcX < 0 || calcX > dimensionX || calcY < 0 || calcY > dimensionY) continue;
+
+                if(currState[i][j] == '+') {
+                    g.setColor(Color.lightGray);
+                    g.fillRect(calcX, calcY, (width), (width));
+                    g.setColor(Color.BLACK);
+                } 
+
                 if(currState[i][j] == 'X') {
                     g.setColor(Color.RED);
-                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
                 } 
                 if(Character.isDigit(currState[i][j])) {
                     Integer.valueOf(currState[i][j]);
                     g.setColor(Color.GREEN);
-                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
                 } 
                 if(currState[i][j] == 'G') {
                     g.setColor(Color.GREEN);
-                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
                 }
                 if(currState[i][j] == 'R') {
                     g.setColor(Color.RED);
-                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
                 }
                 if(currState[i][j] == 'B') {
                     g.setColor(Color.BLUE);
-                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
                 }
                 if(currState[i][j] == 'P') {
                     g.setColor(Color.MAGENTA);
-                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
                 }
                 if(currState[i][j] == '#') {
                     g.setColor(Color.BLACK);
-                    g.fillRect(21+i*(width), 21+j*(width), (width), (width));
+                    g.fillRect(calcX, calcY, (width), (width));
                 }
             }
         }
     }
 
 	public Dimension getPreferredSize() {
-		return new Dimension(1000,1000);
+		return new Dimension(dimensionX,dimensionY);
 	}
 
     public void poll() throws IOException {
@@ -199,7 +224,12 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
             //check if new board is available or dehang?
             try {
                 String input = in.readLine();
-                gameboard.set(input); //not error
+                gameboard.set(input);
+                if(spawned) {
+                    String[] positions = in.readLine().split(" ");
+                    positionX = Integer.parseInt(positions[0]);
+                    positionY = Integer.parseInt(positions[1]);
+                }
                 if(!started) {
                     target = Integer.valueOf(in.readLine());
                     int size = Integer.valueOf(in.readLine().substring(1, 2));
@@ -221,7 +251,6 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
                     while(size < target) {
                         String sizeStr = "";
                         while(sizeStr.length() == 0 || sizeStr.charAt(0) != 'S') {
-                            System.out.println("Size: " + sizeStr);
                             sizeStr = in.readLine();
                         }
                         size = Integer.valueOf(sizeStr.substring(1, 2));
@@ -229,11 +258,13 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
                     screen = 0;
                     //Prints the init statement to the serverthread which uses startLoc to know where to spawn the snake
                     addSnake(startLoc);
+                    spawned = true;
                     String idStr = in.readLine();
                     while(!Character.isDigit(idStr.charAt(0))) {
                         idStr = in.readLine();
                     }
                     id = Integer.valueOf(idStr);
+                    System.out.println("Spawned :" + id);
                     started = true;
                 }
             } catch (Exception e) {System.out.println("check"); System.out.println(e.getMessage()); break;} 

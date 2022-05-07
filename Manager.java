@@ -7,6 +7,7 @@ public class Manager {
     private String mapID;
     private Game game;
     private int target;
+    private boolean started;
 
     public Manager() {
 
@@ -15,6 +16,7 @@ public class Manager {
         mapID = "Map1";
         target = -1;
 
+        started = false;
     }
 
     private void startGame() {
@@ -54,6 +56,11 @@ public class Manager {
     public void broadcast(String msg) {
         for(int i=0; i<clients.size(); i++) {
             clients.get(i).send(msg);
+            if(started && clients.get(i).getSpawned()) {   
+                System.out.println(clients.get(i).getSpawned());
+                String msg2 = game.getPosition(i);
+                clients.get(i).send(msg2);
+            }
         }
     }
 
@@ -96,6 +103,7 @@ public class Manager {
 
     public void play() {
         int counter = 0;
+        started = true;
         while(true) {
             counter++;
             game.move();
@@ -104,7 +112,7 @@ public class Manager {
                 counter = 0;
             }
             broadcast(game.compress());
-            try { Thread.sleep(100); } catch (Exception e) { System.out.println(e); }; //SLEEP
+            try { Thread.sleep(200); } catch (Exception e) { System.out.println(e); }; //SLEEP
         }
     }
 

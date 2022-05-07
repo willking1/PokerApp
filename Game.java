@@ -28,6 +28,19 @@ public class Game {
         }
     }
 
+    public String getPosition(int id) {
+        System.out.println(snakes.size());
+        if(snakes.size() == 0) {
+            System.out.println("All player eliminated.");
+            return "-1000 -1000";
+        }
+        if(snakes.get(id).size() == 0) {
+            System.out.println("Snake " + id + " eliminated.");
+            return "-1000 -1000";
+        } 
+        return snakes.get(id).get(0).getX() + " " + snakes.get(id).get(0).getY();
+    }
+
     public Game(int size) {
         map = new char[size][size];
         splitChar = " ";

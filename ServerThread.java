@@ -8,6 +8,7 @@ public class ServerThread implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
     private int id;
+    private boolean spawned;
 
     public ServerThread(Socket clientSocket, Manager manager) throws IOException {
         this.clientSocket = clientSocket;
@@ -18,6 +19,10 @@ public class ServerThread implements Runnable {
 
     public void run() {
         poll();
+    }
+
+    public boolean getSpawned() {
+        return spawned;
     }
 
     public void poll() {
@@ -40,10 +45,11 @@ public class ServerThread implements Runnable {
                     String[] pos = input.split(" ");
                     id = manager.addSnake(Integer.parseInt(pos[0]), Integer.parseInt(pos[1]), Integer.parseInt(pos[2])); //this line?
                     out.println(id);
+                    spawned = true;
                 } else if(prefix.equals("targ")) {
                     int target = Integer.valueOf(input);
                     manager.setTarget(target);
-                } 
+                }
             } catch (Exception e) {
                System.out.println("failed st " + e);
                break;
