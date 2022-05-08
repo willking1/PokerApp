@@ -29,16 +29,20 @@ public class Game {
     }
 
     public String getPosition(int id) {
-        System.out.println(snakes.size());
+        String s = "";
         if(snakes.size() == 0) {
-            System.out.println("All player eliminated.");
-            return "-1000 -1000";
+            s +=  "-1000 -1000";
+        } else if(snakes.get(id).size() == 0) {
+            s +=  "-1000 -1000";
+        } else {
+            s += snakes.get(id).get(0).getX() + " " + snakes.get(id).get(0).getY();
         }
-        if(snakes.get(id).size() == 0) {
-            System.out.println("Snake " + id + " eliminated.");
-            return "-1000 -1000";
-        } 
-        return snakes.get(id).get(0).getX() + " " + snakes.get(id).get(0).getY();
+        s += "/";
+        for(int i=0; i<snakes.size(); i++) {
+            if(i == id || snakes.get(i).size() == 0) continue;
+            s += snakes.get(i).get(0).getX() + " " + snakes.get(i).get(0).getY() + "/";
+        }
+        return s;
     }
 
     public Game(int size) {
@@ -134,8 +138,6 @@ public class Game {
             map[newX][newY] = 'G';
             snakes.get(ind).add(new Tail(snakes.get(ind).get(i-1), -1, newX, newY, map));
         }
-
-        System.out.println(startX + " " + startY);
         dirs.add(d);
         return ind; //returns client id
     }
@@ -171,6 +173,15 @@ public class Game {
                 kill(i);
             }
         }
+    }
+
+    public String getLocs(int id) {
+        String s = "";
+        for(int i=0; i<snakes.size(); i++) {
+            if( i == id ) continue;
+            s += snakes.get(i).get(0).getX() + "/" + snakes.get(i).get(0).getY() + " ";
+        }
+        return s.substring(0, s.length()-1);
     }
 
     public void kill(int i) {

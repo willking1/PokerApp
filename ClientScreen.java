@@ -1,4 +1,5 @@
 import javax.imageio.*;
+import javax.imageio.spi.IIOServiceProvider;
 import javax.swing.*;
 import java.io.*;
 import java.net.*;
@@ -11,7 +12,7 @@ import java.awt.event.KeyEvent;
 
 public class ClientScreen extends JPanel implements KeyListener, ActionListener {
 
-    //game
+    // game
     private Game gameboard;
     private boolean started;
     private int id;
@@ -21,18 +22,19 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
     private int positionX;
     private int positionY;
     private int gameSize;
+    private CAL<Position> posList;
 
-    //snake - temp?
+    // snake - temp?
     private int width;
 
-    //network
+    // network
     private String hostName;
     private int portNumber;
     private Socket serverSocket;
     private BufferedReader in;
     private PrintWriter out;
 
-    //Graphical Components
+    // Graphical Components
     private int dimensionX;
     private int dimensionY;
     private JLabel titleLabel;
@@ -42,32 +44,31 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
     private JButton fourPlayerB;
     private JLabel waitingLabel;
 
-	public ClientScreen() throws IOException {
+    public ClientScreen() throws IOException {
 
         dimensionX = 1000;
         dimensionY = 1000;
 
         spawned = false;
-        
-        id = -1;
-		setLayout(null);
-        setFocusable(true);
-        gameboard = new Game(50);
 
-        gameSize = 50;
+        id = -1;
+        setLayout(null);
+        setFocusable(true);
+        gameSize = 104;
+        gameboard = new Game(gameSize);
 
         started = false;
         setFocusable(true);
         addKeyListener(this);
 
-        hostName = "localhost"; 
-		portNumber = 96;
-		serverSocket = new Socket(hostName, portNumber);
+        hostName = "localhost";
+        portNumber = 96;
+        serverSocket = new Socket(hostName, portNumber);
         in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
         out = new PrintWriter(serverSocket.getOutputStream(), true);
 
-        width = 18; 
-        //Graphical Componenets
+        width = 18;
+        // Graphical Componenets
         screen = 2;
         titleLabel = new JLabel();
         titleLabel.setFont(new Font("Arial", Font.BOLD, 67));
@@ -87,7 +88,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
         twoPlayerB.setBounds(396, 305, 200, 150);
         twoPlayerB.setText("Two Players");
         this.add(twoPlayerB);
-        twoPlayerB.addActionListener(this);   
+        twoPlayerB.addActionListener(this);
         threePlayerB = new JButton();
         threePlayerB.setFont(new Font("Arial", Font.BOLD, 20));
         threePlayerB.setHorizontalAlignment(SwingConstants.CENTER);
@@ -109,27 +110,29 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
         waitingLabel.setBounds(238, 47, 600, 30);
         waitingLabel.setText("Waiting for all snakes to connect...");
         this.add(waitingLabel);
-	}
-	
-	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-        /*Screens
-        0 = game screen
-        1 = menu screen
-        2 = waiting screen
-        */
-        if(screen == 0) {
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        /*
+         * Screens
+         * 0 = game screen
+         * 1 = menu screen
+         * 2 = waiting screen
+         */
+        if (screen == 0) {
             titleLabel.setVisible(false);
             playerSelect.setVisible(false);
             twoPlayerB.setVisible(false);
             threePlayerB.setVisible(false);
             fourPlayerB.setVisible(false);
             waitingLabel.setVisible(false);
-            if(started) {
+            if (started) {
                 drawGame(g);
+                drawMiniMap(g);
             }
         }
-        if(screen == 1) {
+        if (screen == 1) {
             titleLabel.setVisible(true);
             playerSelect.setVisible(true);
             twoPlayerB.setVisible(true);
@@ -137,7 +140,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
             fourPlayerB.setVisible(true);
             waitingLabel.setVisible(false);
         }
-        if(screen == 2) {
+        if (screen == 2) {
             titleLabel.setVisible(false);
             playerSelect.setVisible(false);
             twoPlayerB.setVisible(false);
@@ -145,68 +148,74 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
             fourPlayerB.setVisible(false);
             waitingLabel.setVisible(true);
             try {
-                BufferedImage img = ImageIO.read(new URL("https://media.australian.museum/media/dd/images/Some_image.width-800.139634f.jpg"));
+                BufferedImage img = ImageIO.read(
+                        new URL("https://media.australian.museum/media/dd/images/Some_image.width-800.139634f.jpg"));
                 g.drawImage(img, 100, 120, null);
             } catch (IOException e) {
                 System.out.println(e);
             }
         }
-	}
+    }
 
     public void drawGame(Graphics g) {
-        g.setColor(Color.black);
+        g.setColor(Color.lightGray);
         g.fillRect(0, 0, dimensionX, dimensionY);
         int x = positionY;
         int y = positionX;
+        int buffer = 30;
         char[][] currState = gameboard.getArr();
-        for(int i=x-25; i<x+25; i++) {
-            if(i < 0 || i >= gameSize) continue;
-            for(int j=y-25; j<y+25; j++) {
-                if(j < 0 || j >= gameSize) continue;
+        for (int i = x - buffer; i < x + buffer; i++) {
+            if (i < 0 || i >= gameSize)
+                continue;
+            for (int j = y - buffer; j < y + buffer; j++) {
+                if (j < 0 || j >= gameSize)
+                    continue;
 
-                int calcX = 500+(i-x)*(width);
-                int calcY = 500+(j-y)*(width);
+                int calcX = 500-(width/2) + (i - x) * (width);
+                int calcY = 450-(width/2) + (j - y) * (width);
+                //how to fix margin issues?
 
-                if(calcX < 0 || calcX > dimensionX || calcY < 0 || calcY > dimensionY) continue;
+                if (calcX < 0 || calcX > dimensionX || calcY < 0 || calcY > dimensionY)
+                    continue;
 
-                if(currState[i][j] == '+') {
+                if (currState[i][j] == '+') {
                     g.setColor(Color.lightGray);
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
-                } 
+                }
 
-                if(currState[i][j] == 'X') {
+                if (currState[i][j] == 'X') {
                     g.setColor(Color.RED);
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
-                } 
-                if(Character.isDigit(currState[i][j])) {
+                }
+                if (Character.isDigit(currState[i][j])) {
                     Integer.valueOf(currState[i][j]);
                     g.setColor(Color.GREEN);
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
-                } 
-                if(currState[i][j] == 'G') {
+                }
+                if (currState[i][j] == 'G') {
                     g.setColor(Color.GREEN);
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
                 }
-                if(currState[i][j] == 'R') {
+                if (currState[i][j] == 'R') {
                     g.setColor(Color.RED);
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
                 }
-                if(currState[i][j] == 'B') {
+                if (currState[i][j] == 'B') {
                     g.setColor(Color.BLUE);
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
                 }
-                if(currState[i][j] == 'P') {
+                if (currState[i][j] == 'P') {
                     g.setColor(Color.MAGENTA);
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
                 }
-                if(currState[i][j] == '#') {
+                if (currState[i][j] == '#') {
                     g.setColor(Color.BLACK);
                     g.fillRect(calcX, calcY, (width), (width));
                 }
@@ -214,117 +223,154 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
         }
     }
 
-	public Dimension getPreferredSize() {
-		return new Dimension(dimensionX,dimensionY);
-	}
+    public void drawMiniMap(Graphics g){
+        int x = 15;
+        int y = 15;
+        int width = (gameSize*3)/2; //current multipler is 3/2, possible change later
+        int cellSize = 10;
+        int buffer = 4 * -1;
+        Color bg = new Color(70, 70, 70, 70);
+        g.setColor(bg);
+        g.fillRect(x, y, width, width);
+        //posList size is only 1?
+        for(int i=0; i<posList.size(); i++) {
+            if(i == 0) {
+                g.setColor(Color.green);
+            } else {
+                g.setColor(Color.red);
+            }
+            int calcX = buffer + y + (posList.get(i).getY()*3)/2;
+            int calcY = buffer + x + (posList.get(i).getX()*3)/2;
+            //line below is unnecessary?
+            if(posList.get(i).getX() < 0 || posList.get(i).getX() > gameSize || posList.get(i).getY() < 0 || posList.get(i).getY() > gameSize);
+            g.fillRect(calcX, calcY, cellSize, cellSize);
+        }
+    }
+
+    public Dimension getPreferredSize() {
+        return new Dimension(dimensionX, dimensionY);
+    }
 
     public void poll() throws IOException {
-        //every 15 loops it will add a new block
-        while(true) {
-            //check if new board is available or dehang?
+        // every 15 loops it will add a new block
+        while (true) {
+            // check if new board is available or dehang?
             try {
                 String input = in.readLine();
                 gameboard.set(input);
-                if(spawned) {
-                    String[] positions = in.readLine().split(" ");
-                    positionX = Integer.parseInt(positions[0]);
-                    positionY = Integer.parseInt(positions[1]);
+                if (spawned) {
+                    //read in positions of all snakes
+                    String[] positions = in.readLine().split("/"); //why is this size 1?
+                    posList = new CAL<Position>();
+                    for(int i=0; i<positions.length; i++) {
+                        posList.add(new Position(Integer.parseInt(positions[i].split(" ")[0]), Integer.parseInt(positions[i].split(" ")[1])));
+                    }
+                    positionX = posList.get(0).getX();
+                    positionY = posList.get(0).getY();
                 }
-                if(!started) {
+                if (!started) {
                     target = Integer.valueOf(in.readLine());
                     int size = Integer.valueOf(in.readLine().substring(1, 2));
-                    int startLoc = size-1;
+                    int startLoc = size - 1;
                     screen = 1;
-                    //Checks if the current client is the first client to connect and puts it in the menu screen if it is
-                    if(size == 1) {
+                    // Checks if the current client is the first client to connect and puts it in
+                    // the menu screen if it is
+                    if (size == 1) {
                         repaint();
-                        //waits for the client to select number of players, which will change the target number
-                        while(target == -1) {
+                        // waits for the client to select number of players, which will change the
+                        // target number
+                        while (target == -1) {
                             String temp = in.readLine();
-                            String targetStr = temp.charAt(0)=='T' ? temp.substring(1,2) : "-1";
+                            String targetStr = temp.charAt(0) == 'T' ? temp.substring(1, 2) : "-1";
                             target = Integer.valueOf(targetStr);
                         }
                     }
                     screen = 2;
                     repaint();
-                    //waits for all the clients to connect before calling addSnake
-                    while(size < target) {
+                    // waits for all the clients to connect before calling addSnake
+                    while (size < target) {
                         String sizeStr = "";
-                        while(sizeStr.length() == 0 || sizeStr.charAt(0) != 'S') {
+                        while (sizeStr.length() == 0 || sizeStr.charAt(0) != 'S') {
                             sizeStr = in.readLine();
                         }
                         size = Integer.valueOf(sizeStr.substring(1, 2));
                     }
                     screen = 0;
-                    //Prints the init statement to the serverthread which uses startLoc to know where to spawn the snake
+                    // Prints the init statement to the serverthread which uses startLoc to know
+                    // where to spawn the snake
                     addSnake(startLoc);
                     spawned = true;
                     String idStr = in.readLine();
-                    while(!Character.isDigit(idStr.charAt(0))) {
+                    while (!Character.isDigit(idStr.charAt(0))) {
                         idStr = in.readLine();
                     }
                     id = Integer.valueOf(idStr);
                     System.out.println("Spawned :" + id);
                     started = true;
                 }
-            } catch (Exception e) {System.out.println("check"); System.out.println(e.getMessage()); break;} 
-           repaint();
+            } catch (Exception e) {
+                System.out.println("check");
+                System.out.println(e.getMessage());
+                break;
+            }
+            repaint();
         }
     }
 
     public void addSnake(int loc) {
         int x, y, dir;
-        if(loc == 0) {
-            x = 4;
-            y = 4;
+        if (loc == 0) {
+            x = 15;
+            y = 15;
             dir = 2;
-        } else if(loc == 1) {
-            x = 20;
-            y = 4;
+        } else if (loc == 1) {
+            x = 15;
+            y = 85;
             dir = 2;
-        } else if(loc == 2) {
-            x = 4;
-            y = 20;
-            dir = 2;
+        } else if (loc == 2) {
+            x = 85;
+            y = 15;
+            dir = 1;
         } else {
-            x = 30;
-            y = 30;
+            x = 85;
+            y = 85;
             dir = 1;
         }
-        out.println("init " + x + " " + y + " " + dir); 
+        out.println("init " + x + " " + y + " " + dir);
     }
 
     public void keyTyped(KeyEvent e) {}
 
-    public void keyPressed(KeyEvent e) { //why does this appear delayed?
-        if(!started) return;
+    public void keyPressed(KeyEvent e) { // why does this appear delayed?
+        if (!started)
+            return;
         int keyCode = e.getKeyCode();
-        if(keyCode == 39) {
+        if (keyCode == 39) {
             out.println("move 4");
         }
-        if(keyCode == 37) {
+        if (keyCode == 37) {
             out.println("move 3");
         }
-        if(keyCode == 38) {
+        if (keyCode == 38) {
             out.println("move 1");
         }
-        if(keyCode == 40) {
+        if (keyCode == 40) {
             out.println("move 2");
         }
         out.flush();
-    } 
+    }
 
     public void keyReleased(KeyEvent e) {}
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == twoPlayerB) {
+        if (e.getSource() == twoPlayerB) {
             out.println("targ 2");
         }
-        if(e.getSource() == threePlayerB) {
+        if (e.getSource() == threePlayerB) {
             out.println("targ 3");
         }
-        if(e.getSource() == fourPlayerB) {
+        if (e.getSource() == fourPlayerB) {
             out.println("targ 4");
         }
     }

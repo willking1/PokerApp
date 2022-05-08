@@ -12,7 +12,7 @@ public class Manager {
     public Manager() {
 
         clients = new CAL<ServerThread>();
-        mapSize = 50;
+        mapSize = 104;
         mapID = "Map1";
         target = -1;
 
@@ -57,7 +57,6 @@ public class Manager {
         for(int i=0; i<clients.size(); i++) {
             clients.get(i).send(msg);
             if(started && clients.get(i).getSpawned()) {   
-                System.out.println(clients.get(i).getSpawned());
                 String msg2 = game.getPosition(i);
                 clients.get(i).send(msg2);
             }
@@ -68,6 +67,10 @@ public class Manager {
         if(clients.size() == target) {
             play();
         }
+    }
+
+    public void sendLocs(int id) {
+        clients.get(id).send(game.getLocs(id));
     }
 
     public int size() {
@@ -112,7 +115,7 @@ public class Manager {
                 counter = 0;
             }
             broadcast(game.compress());
-            try { Thread.sleep(200); } catch (Exception e) { System.out.println(e); }; //SLEEP
+            try { Thread.sleep(125); } catch (Exception e) { System.out.println(e); }; //SLEEP
         }
     }
 
