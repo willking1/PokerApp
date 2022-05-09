@@ -6,6 +6,7 @@ public class Game {
     private String splitChar, splitLine;
     private CAL<String> dirs;
     private CAL<CAL<Tail>> snakes;
+    private Cal<Cal<PowerUp>> powerups;
     private CAL<PowerUp> blocks;
 
     public Game(char[][] map) {
@@ -14,6 +15,7 @@ public class Game {
         splitLine = "|";
         startCount = 4;
         snakes = new CAL<CAL<Tail>>();
+        powerups = new CAL<CAL<PowerUp>>();
         dirs = new CAL<String>();
         blocks = new CAL<PowerUp>();
         cloneMap();
@@ -98,28 +100,52 @@ public class Game {
         return s.substring(0, s.length()-2);
     }
 
-    public void addSnakeBlock(CAL<Tail> snake, char color) {
+    public void addSnakeBlock(CAL<Tail> snake, PowerUp p, int index) {
         Tail tail = snake.get(snake.size()-1);
         //bases where the block gets added by the position of the block after the tail
         if(tail.next().getX()==tail.getX()+1) {
-            snake.add(new Tail(tail, -1, tail.getX()-1, tail.getY(), map, color));
-            map[tail.getX()-1][tail.getY()] = color;
+            snake.add(new Tail(tail, -1, tail.getX()-1, tail.getY(), map, p.getColor()));
+            map[tail.getX()-1][tail.getY()] = p.getColor();
+            powerups.get(index).add(new PowerUp(snake.get(snake.size()-1).getX(), snake.get(snake.size()-1).getY(), snake.size()-1));
         } else if(tail.next().getX()==tail.getX()-1) {
-            snake.add(new Tail(tail, -1, tail.getX()+1, tail.getY(), map, color));
-            map[tail.getX()+1][tail.getY()] = color;
+            snake.add(new Tail(tail, -1, tail.getX()+1, tail.getY(), map, p.getColor()));
+            map[tail.getX()+1][tail.getY()] = p.getColor();
+            powerups.get(index).add(new PowerUp(snake.get(snake.size()-1).getX(), snake.get(snake.size()-1).getY(), snake.size()-1));
         } else if(tail.next().getY()==tail.getY()+1) {
-            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()-1, map, color));
-            map[tail.getX()][tail.getY()-1] = color;
+            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()-1, map, p.getColor()));
+            map[tail.getX()][tail.getY()-1] = p.getColor();
+            powerups.get(index).add(new PowerUp(snake.get(snake.size()-1).getX(), snake.get(snake.size()-1).getY(), snake.size()-1));
         } else {
-            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()+1, map, color));
-            map[tail.getX()][tail.getY()+1] = color;
+            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()+1, map, p.getColor()));
+            map[tail.getX()][tail.getY()+1] = p.getColor();
+            powerups.get(index).add(new PowerUp(snake.get(snake.size()-1).getX(), snake.get(snake.size()-1).getY(), snake.size()-1));
         }
+    }
+
+    public void removeSnakeBlock(CAL<Tail> snake, int index) {
+        for(int i = index+1; i < snake.size(); i++) {
+            snake.get(i-1) = snake.get(i);
+        }
+        snake.remove(snake.size()-1);
+        for(int i = 0; i < powerups.size(); i++) {
+            if(powerups.get(i).getSnakePos() == index) {
+                powers.remove(i);
+                i--;
+            } else if(powerups.get(i).getSnakePos() > index) {
+                powerups.get(i).setSnakePos(powerups.get(i).getSnakePos()-1);
+            }
+        }
+    }
+
+    public void shootSnakeBlock(int id) {
+        if(powerups.get(id) == null || powerups.get(id).size() < 1) continue;
     }
 
     public int addSnake(int startX, int startY, String d) {
         int dir = Integer.parseInt(d);
         int ind = snakes.size();
         snakes.add(new CAL<Tail>());
+        powerups.add(new CAL<PowerUp>());
         snakes.get(ind).add(new Tail(null, dir, startX, startY, map));
         map[startX][startY] = Character.forDigit(ind, 10);
         for(int i=1; i<startCount; i++) {
@@ -150,16 +176,13 @@ public class Game {
             if(snakes.get(i).size() == 0) continue;
             snakes.get(i).get(0).setDir(Integer.parseInt(dirs.get(i))); //set direction of head - dirs is 0
             map[snakes.get(i).get(snakes.get(i).size()-1).getX()][snakes.get(i).get(snakes.get(i).size()-1).getY()] = '+';
-            for(int j = snakes.get(i).size()-1; j >= 0; j--) {
-                
+            for(int j = snakes.get(i).size()-1; j >= 0; j--) {    
                 snakes.get(i).get(j).move();
-
                 if(j == 0) {
-
                     //Check to see if the new head position is on one of the food blocks
                     for(int k = 0; k < blocks.size(); k++)  {
                         if(blocks.get(k).getX() == snakes.get(i).get(j).getX() && blocks.get(k).getY() == snakes.get(i).get(j).getY()) {
-                            addSnakeBlock(snakes.get(i), blocks.get(k).getColor());
+                            addSnakeBlock(snakes.get(i), blocks.get(k), i);
                         }
                     }
                 }
