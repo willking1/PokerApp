@@ -121,7 +121,8 @@ public class Game {
     }
 
     public void shoot(int id) {
-        
+        int powerUp = snakes.get(id).get(snakes.get(id).size()-1).getPowerUp();
+        if(powerUp == -1) return;
     }
 
     public int addSnake(int startX, int startY, String d) {
