@@ -8,14 +8,20 @@ public class Projectile {
     private int dist;
     private boolean collided;
 
-    public Projectile(int type, int x, int y, int dir, int range) {
+    public Projectile(int type, int x, int y, int dir) {
         this.type = type;
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.range = range;
         dist = 0;
+        if(type == 2) {
+            range = 15;
+        } else {
+            range = -1;
+        }
         collided = false;
+
+        move(); //move once to get clear of head
     }
 
     public void move() {
@@ -41,4 +47,6 @@ public class Projectile {
         //possibly do respective things here?
     }
 
+    public int getX() {return x;}
+    public int getY() {return y;}
 }

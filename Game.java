@@ -7,6 +7,7 @@ public class Game {
     private CAL<String> dirs;
     private CAL<CAL<Tail>> snakes;
     private CAL<PowerUp> blocks;
+    private CAL<Projectile> projectiles;
 
     public Game(char[][] map) {
         this.map = map;
@@ -16,6 +17,7 @@ public class Game {
         snakes = new CAL<CAL<Tail>>();
         dirs = new CAL<String>();
         blocks = new CAL<PowerUp>();
+        projectiles = new CAL<Projectile>();
         cloneMap();
     }
 
@@ -116,13 +118,14 @@ public class Game {
         }
     }
 
-    public void removeSnakeBlock(int index, int id) {
-        
-    }
-
-    public void shoot(int id) {
-        int powerUp = snakes.get(id).get(snakes.get(id).size()-1).getPowerUp();
-        if(powerUp == -1) return;
+    public void shoot(int id) { //not calling properly
+        Tail last = snakes.get(id).get(snakes.get(id).size()-1); //gets last block in snake
+        int powerUp = last.getPowerUp();
+        System.out.println(powerUp);
+        if(powerUp == -1) return; //check if last block is indeed powerup
+        projectiles.add(new Projectile(powerUp, snakes.get(id).get(0).getX(), snakes.get(id).get(0).getY(), snakes.get(id).get(0).getDir()));
+        map[last.getX()][last.getY()] = '+'; //visual deletion
+        snakes.get(id).remove(snakes.get(id).size()-1); //actual deletion
     }
 
     public int addSnake(int startX, int startY, String d) {
@@ -149,6 +152,17 @@ public class Game {
         }
         dirs.add(d);
         return ind; //returns client id
+    }
+
+    public void moveProjectiles() {
+        for(int i=0; i<projectiles.size(); i++) {
+            map[projectiles.get(i).getX()][projectiles.get(i).getY()] = '+';
+            projectiles.get(i).move();
+
+            //check collision here?
+
+            map[projectiles.get(i).getX()][projectiles.get(i).getY()] = 'X';
+        }
     }
 
     //Also slightly buzzin at the moment

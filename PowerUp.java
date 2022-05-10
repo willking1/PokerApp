@@ -8,14 +8,14 @@ public class PowerUp {
         this.posX = posX;
         this.posY = posY;
         type = (int)(Math.random()*3);
-        color = type == 0 ? 'B' : type == 1 ? 'R' : 'P';
+        color = type == 0 ? 'B' : type == 2 ? 'R' : 'P';
     }
     public PowerUp(int posX, int posY, int snakePos) {
         this.snakePos = snakePos;
         this.posX = posX;
         this.posY = posY;
         type = (int)(Math.random()*3);
-        color = type == 0 ? 'B' : type == 1 ? 'R' : 'P';
+        color = type == 0 ? 'B' : type == 2 ? 'R' : 'P';
     }
     //snakePos is the index within a snake of the powerup block
     public int getSnakePos() {

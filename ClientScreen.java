@@ -224,6 +224,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
     }
 
     public void drawMiniMap(Graphics g){
+        if(posList == null) return;
         int x = 15;
         int y = 15;
         int width = (gameSize*3)/2; //current multipler is 3/2, possible change later

@@ -8,6 +8,8 @@ public class Manager {
     private Game game;
     private int target;
     private boolean started;
+    private int fps;
+    private int moveDelay;
 
     public Manager() {
 
@@ -17,6 +19,9 @@ public class Manager {
         target = -1;
 
         started = false;
+
+        fps = 65;
+        moveDelay = 1;
     }
 
     private void startGame() {
@@ -100,7 +105,7 @@ public class Manager {
     }
 
     public void shoot(int id) {
-        // game.shoot(id);
+        game.shoot(id);
     }
 
     public void setTarget(int target) {
@@ -111,15 +116,25 @@ public class Manager {
     public void play() {
         int counter = 0;
         started = true;
+        int moveCount = 0;
         while(true) {
-            counter++;
-            game.move();
-            if(counter == 10) {
-                game.addBlock();
-                counter = 0;
+
+            game.moveProjectiles();  
+
+            if(moveCount == moveDelay) {
+                game.move();
+                counter++;
+                if(counter == 10) {
+                    game.addBlock();
+                    counter = 0;
+                }
+                moveCount = 0;
+            } else {
+                moveCount++;
             }
+            
             broadcast(game.compress());
-            try { Thread.sleep(125); } catch (Exception e) { System.out.println(e); }; //SLEEP
+            try { Thread.sleep(fps); } catch (Exception e) { System.out.println(e); }; //SLEEP
         }
     }
 
