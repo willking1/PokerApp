@@ -27,6 +27,9 @@ public class PowerUp {
     public char getColor() {
         return color;
     }
+    public int getType() {
+        return type;
+    }
     public int getX() {
         return posX;
     }

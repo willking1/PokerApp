@@ -15,6 +15,19 @@ public class CAL <V> {
         list[index] = new FakeGeneric<V>(element);
     }
 
+    public void remove(int index) {
+        if(index >= list.length) return;
+        list[index] = null;
+        FakeGeneric[] temp = new FakeGeneric[list.length-1];
+        int ind = 0;
+        for(int i = 0; i < list.length; i++) {
+            if(list[i] == null) continue;
+            temp[ind] = list[i];
+            ind++;
+        }
+        list = temp;
+    }
+
     public void add(V element) {
         FakeGeneric[] newList = new FakeGeneric[list.length+1];
         for(int i=0; i<list.length; i++) {

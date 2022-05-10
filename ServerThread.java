@@ -49,6 +49,8 @@ public class ServerThread implements Runnable {
                 } else if(prefix.equals("targ")) {
                     int target = Integer.valueOf(input);
                     manager.setTarget(target);
+                } else if(prefix.equals("shot")) {
+                    manager.shoot(id);
                 }
             } catch (Exception e) {
                System.out.println("failed st " + e);

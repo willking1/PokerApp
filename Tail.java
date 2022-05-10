@@ -51,6 +51,7 @@ public class Tail {
     public int getX() {return posX;}
     public int getY() {return posY;}
     public int getDir() {return dir;}
+    public void setNext(Tail next) {this.next = next;}
     public void setColor(char color) {this.color = color;}
     public char getColor() {return color;}
     public void setDir(int dir) {this.dir = dir;}

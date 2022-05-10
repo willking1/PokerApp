@@ -99,6 +99,10 @@ public class Manager {
         game.up(id);
     }
 
+    public void shoot(int id) {
+        game.shoot(id);
+    }
+
     public void setTarget(int target) {
         this.target = target;
         broadcast("T" + target);

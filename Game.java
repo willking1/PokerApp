@@ -6,7 +6,8 @@ public class Game {
     private String splitChar, splitLine;
     private CAL<String> dirs;
     private CAL<CAL<Tail>> snakes;
-    private Cal<Cal<PowerUp>> powerups;
+    //stores the powerups within the snake
+    private CAL<CAL<PowerUp>> powerups;
     private CAL<PowerUp> blocks;
 
     public Game(char[][] map) {
@@ -122,23 +123,26 @@ public class Game {
         }
     }
 
-    public void removeSnakeBlock(CAL<Tail> snake, int index) {
-        for(int i = index+1; i < snake.size(); i++) {
-            snake.get(i-1) = snake.get(i);
-        }
-        snake.remove(snake.size()-1);
-        for(int i = 0; i < powerups.size(); i++) {
-            if(powerups.get(i).getSnakePos() == index) {
-                powers.remove(i);
-                i--;
-            } else if(powerups.get(i).getSnakePos() > index) {
-                powerups.get(i).setSnakePos(powerups.get(i).getSnakePos()-1);
+    public void removeSnakeBlock(int index, int id) {
+        CAL<Tail> snake = snakes.get(id);
+        for(int i = 0; i < powerups.get(id).size(); i++) {
+            if(powerups.get(id).get(i).getSnakePos() == index) {
+                powerups.get(id).remove(i);
+                break;
             }
         }
+        if(index != snake.size()-1) snake.get(index+1).setNext(snake.get(index-1));
+        snake.remove(index);
     }
 
-    public void shootSnakeBlock(int id) {
-        if(powerups.get(id) == null || powerups.get(id).size() < 1) continue;
+    public void shoot(int id) {
+        if(powerups.get(id) == null || powerups.get(id).size() < 1) return;
+        for(int i = 0; i < powerups.get(id).size(); i++) {
+            if(powerups.get(id).get(i).getType() == 0) {
+                removeSnakeBlock(powerups.get(id).get(i).getSnakePos(), id);
+                return;
+            }
+        }
     }
 
     public int addSnake(int startX, int startY, String d) {
