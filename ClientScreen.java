@@ -346,16 +346,16 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
         if (!started)
             return;
         int keyCode = e.getKeyCode();
-        if(keyCode == 39) {
+        if(keyCode == 39|| keyCode == 68) {
             out.println("move 4");
         }
-        if(keyCode == 37) {
+        if(keyCode == 37|| keyCode == 65) {
             out.println("move 3");
         }
-        if(keyCode == 38) {
+        if(keyCode == 38 || keyCode == 87) {
             out.println("move 1");
         }
-        if(keyCode == 40) {
+        if(keyCode == 40 || keyCode == 83) {
             out.println("move 2");
         }
         if(keyCode == 32) {
