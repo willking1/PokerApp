@@ -8,6 +8,7 @@ public class Tail {
     private int dir;
     private char[][] map;
     private char color;
+    private int powerup;
     
     public Tail(Tail next, int dir, int posX, int posY, char[][] map) {
         this.map = map;
@@ -16,18 +17,18 @@ public class Tail {
         this.posX = posX;
         this.posY = posY;
         color = 'G';
+        powerup = -1;
     }
 
-    public Tail(Tail next, int dir, int posX, int posY, char[][] map, char color) {
+    public Tail(Tail next, int dir, int posX, int posY, char[][] map, char color, int powerup) {
         this.map = map;
         this.next = next;
         this.dir = dir;
         this.posX = posX;
         this.posY = posY;
         this.color = color;
+        this.powerup = powerup;
     }
-
-    public void drawMe(Graphics g) {} //should we draw here?
 
     public void move() {
         if(dir == -1) {
@@ -53,6 +54,7 @@ public class Tail {
     public int getDir() {return dir;}
     public void setNext(Tail next) {this.next = next;}
     public void setColor(char color) {this.color = color;}
+    public int getPowerUp() {return powerup;}
     public char getColor() {return color;}
     public void setDir(int dir) {this.dir = dir;}
 

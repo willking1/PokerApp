@@ -6,8 +6,6 @@ public class Game {
     private String splitChar, splitLine;
     private CAL<String> dirs;
     private CAL<CAL<Tail>> snakes;
-    //stores the powerups within the snake
-    private CAL<CAL<PowerUp>> powerups;
     private CAL<PowerUp> blocks;
 
     public Game(char[][] map) {
@@ -16,7 +14,6 @@ public class Game {
         splitLine = "|";
         startCount = 4;
         snakes = new CAL<CAL<Tail>>();
-        powerups = new CAL<CAL<PowerUp>>();
         dirs = new CAL<String>();
         blocks = new CAL<PowerUp>();
         cloneMap();
@@ -105,51 +102,32 @@ public class Game {
         Tail tail = snake.get(snake.size()-1);
         //bases where the block gets added by the position of the block after the tail
         if(tail.next().getX()==tail.getX()+1) {
-            snake.add(new Tail(tail, -1, tail.getX()-1, tail.getY(), map, p.getColor()));
+            snake.add(new Tail(tail, -1, tail.getX()-1, tail.getY(), map, p.getColor(), p.getType()));
             map[tail.getX()-1][tail.getY()] = p.getColor();
-            powerups.get(index).add(new PowerUp(snake.get(snake.size()-1).getX(), snake.get(snake.size()-1).getY(), snake.size()-1));
         } else if(tail.next().getX()==tail.getX()-1) {
-            snake.add(new Tail(tail, -1, tail.getX()+1, tail.getY(), map, p.getColor()));
+            snake.add(new Tail(tail, -1, tail.getX()+1, tail.getY(), map, p.getColor(), p.getType()));
             map[tail.getX()+1][tail.getY()] = p.getColor();
-            powerups.get(index).add(new PowerUp(snake.get(snake.size()-1).getX(), snake.get(snake.size()-1).getY(), snake.size()-1));
         } else if(tail.next().getY()==tail.getY()+1) {
-            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()-1, map, p.getColor()));
+            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()-1, map, p.getColor(), p.getType()));
             map[tail.getX()][tail.getY()-1] = p.getColor();
-            powerups.get(index).add(new PowerUp(snake.get(snake.size()-1).getX(), snake.get(snake.size()-1).getY(), snake.size()-1));
         } else {
-            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()+1, map, p.getColor()));
+            snake.add(new Tail(tail, -1, tail.getX(), tail.getY()+1, map, p.getColor(), p.getType()));
             map[tail.getX()][tail.getY()+1] = p.getColor();
-            powerups.get(index).add(new PowerUp(snake.get(snake.size()-1).getX(), snake.get(snake.size()-1).getY(), snake.size()-1));
         }
     }
 
     public void removeSnakeBlock(int index, int id) {
-        CAL<Tail> snake = snakes.get(id);
-        for(int i = 0; i < powerups.get(id).size(); i++) {
-            if(powerups.get(id).get(i).getSnakePos() == index) {
-                powerups.get(id).remove(i);
-                break;
-            }
-        }
-        if(index != snake.size()-1) snake.get(index+1).setNext(snake.get(index-1));
-        snake.remove(index);
+        
     }
 
     public void shoot(int id) {
-        if(powerups.get(id) == null || powerups.get(id).size() < 1) return;
-        for(int i = 0; i < powerups.get(id).size(); i++) {
-            if(powerups.get(id).get(i).getType() == 0) {
-                removeSnakeBlock(powerups.get(id).get(i).getSnakePos(), id);
-                return;
-            }
-        }
+        
     }
 
     public int addSnake(int startX, int startY, String d) {
         int dir = Integer.parseInt(d);
         int ind = snakes.size();
         snakes.add(new CAL<Tail>());
-        powerups.add(new CAL<PowerUp>());
         snakes.get(ind).add(new Tail(null, dir, startX, startY, map));
         map[startX][startY] = Character.forDigit(ind, 10);
         for(int i=1; i<startCount; i++) {

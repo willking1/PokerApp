@@ -100,7 +100,7 @@ public class Manager {
     }
 
     public void shoot(int id) {
-        game.shoot(id);
+        // game.shoot(id);
     }
 
     public void setTarget(int target) {
