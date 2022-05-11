@@ -268,6 +268,9 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
                     }
                     positionX = posList.get(0).getX();
                     positionY = posList.get(0).getY();
+
+                    //TODO GET PROJECTILES FROM MANAGER HERE?
+
                 }
                 if (!started) {
                     target = Integer.valueOf(in.readLine());

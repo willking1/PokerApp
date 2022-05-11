@@ -102,6 +102,7 @@ public class Manager {
 
     public void up(int id) {
         game.up(id);
+        //get mouse position from parameters here
     }
 
     public void shoot(int id) {
