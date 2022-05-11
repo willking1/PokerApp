@@ -9,8 +9,10 @@ import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 
-public class ClientScreen extends JPanel implements KeyListener, ActionListener {
+public class ClientScreen extends JPanel implements KeyListener, ActionListener, MouseListener {
 
     // game
     private Game gameboard;
@@ -23,6 +25,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
     private int positionY;
     private int gameSize;
     private CAL<Position> posList;
+    private String[] projectiles;
 
     // snake - temp?
     private int width;
@@ -60,6 +63,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
         started = false;
         setFocusable(true);
         addKeyListener(this);
+        addMouseListener(this);
 
         hostName = "localhost";
         portNumber = 96;
@@ -129,6 +133,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
             waitingLabel.setVisible(false);
             if (started) {
                 drawGame(g);
+                drawProjectiles(g);
                 drawMiniMap(g);
             }
         }
@@ -154,6 +159,25 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
             } catch (IOException e) {
                 System.out.println(e);
             }
+        }
+    }
+
+    public void drawProjectiles(Graphics g) {
+
+        //adjust here for server side pos dummy
+
+        if(projectiles == null || projectiles.length == 0) return;
+        for(int i=0; i<projectiles.length; i++) {
+            System.out.println(i + ": " + projectiles[i]);
+            try {
+                String[] data = projectiles[i].split(" ");
+                int projX = Integer.parseInt(data[0]);
+                int projY = Integer.parseInt(data[1]);
+                int projType = Integer.parseInt(data[2]);
+                //check projectile type here and draw accordingly
+                g.setColor(Color.pink);
+                g.fillRect(projX, projY, 50, 50);
+            } catch (Exception e) {}
         }
     }
 
@@ -269,7 +293,12 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
                     positionX = posList.get(0).getX();
                     positionY = posList.get(0).getY();
 
-                    //TODO GET PROJECTILES FROM MANAGER HERE?
+                    //GET PROJECTILES FROM MANAGER HERE
+                    String projInput = in.readLine();
+                    if(projInput != null && projInput != "" && projInput.indexOf('x') != -1) {
+                        projInput = projInput.substring(1, projInput.length());
+                        projectiles = projInput.split("/");
+                    }
 
                 }
                 if (!started) {
@@ -361,9 +390,10 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
         if(keyCode == 40 || keyCode == 83) {
             out.println("move 2");
         }
-        if(keyCode == 32) {
-            out.println("shot s");
-        }
+        //shooting should be done with mouse
+        // if(keyCode == 32) {
+        //     out.println("shot s");
+        // }
         out.flush();
     }
 
@@ -381,4 +411,17 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener 
             out.println("targ 4");
         }
     }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        //shooting will have to be done here
+        int x = e.getX();
+        int y = e.getY();
+        out.println("shot " + x + " " + y);
+    }
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {}
+
 }

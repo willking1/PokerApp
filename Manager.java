@@ -64,6 +64,7 @@ public class Manager {
             if(started && clients.get(i).getSpawned()) {   
                 String msg2 = game.getPosition(i);
                 clients.get(i).send(msg2);
+                clients.get(i).send(getProjPos());
             }
         }
     }
@@ -105,13 +106,17 @@ public class Manager {
         //get mouse position from parameters here
     }
 
-    public void shoot(int id) {
-        game.shoot(id);
+    public void shoot(int id, int targetX, int targetY) {
+        game.shoot(id, targetX, targetY);
     }
 
     public void setTarget(int target) {
         this.target = target;
         broadcast("T" + target);
+    }
+
+    public String getProjPos() {
+        return game.getProjectilePositions();
     }
 
     public void play() {

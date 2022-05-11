@@ -118,12 +118,12 @@ public class Game {
         }
     }
 
-    public void shoot(int id) { //not calling properly
+    public void shoot(int id, int targetX, int targetY) {
         Tail last = snakes.get(id).get(snakes.get(id).size()-1); //gets last block in snake
         int powerUp = last.getPowerUp();
         System.out.println(powerUp);
         if(powerUp == -1) return; //check if last block is indeed powerup
-        projectiles.add(new Projectile(powerUp, snakes.get(id).get(0).getX(), snakes.get(id).get(0).getY(), snakes.get(id).get(0).getDir()));
+        projectiles.add(new Projectile(powerUp, snakes.get(id).get(0).getX(), snakes.get(id).get(0).getY(), snakes.get(id).get(0).getDir(), targetX, targetY));
         map[last.getX()][last.getY()] = '+'; //visual deletion
         snakes.get(id).remove(snakes.get(id).size()-1); //actual deletion
     }
@@ -156,13 +156,23 @@ public class Game {
 
     public void moveProjectiles() {
         for(int i=0; i<projectiles.size(); i++) {
-            map[projectiles.get(i).getX()][projectiles.get(i).getY()] = '+';
+            // map[projectiles.get(i).getX()][projectiles.get(i).getY()] = '+';
             projectiles.get(i).move();
 
             //check collision here?
 
-            map[projectiles.get(i).getX()][projectiles.get(i).getY()] = 'X';
+            // map[projectiles.get(i).getX()][projectiles.get(i).getY()] = 'X';
         }
+    }
+
+    public String getProjectilePositions() {
+        if(projectiles.size() == 0) return "";
+        String s = "x";
+        for(int i=0; i<projectiles.size(); i++) {
+            //account for diff. projectile types here too
+            s += projectiles.get(i).getX() + " " + projectiles.get(i).getY() + " " + projectiles.get(i).getType() + "/";
+        }
+        return s.substring(0, s.length()-1);
     }
 
     //Also slightly buzzin at the moment

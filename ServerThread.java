@@ -50,7 +50,12 @@ public class ServerThread implements Runnable {
                     int target = Integer.valueOf(input);
                     manager.setTarget(target);
                 } else if(prefix.equals("shot")) {
-                    manager.shoot(id);
+                    //should input have no initial space then?
+                    if(input.charAt(0) == ' ') input = input.substring(1, input.length());
+                    String[] pos = input.split(" ");
+                    int x = Integer.parseInt(pos[0]);
+                    int y = Integer.parseInt(pos[1]);
+                    manager.shoot(id, x, y);
                 }
             } catch (Exception e) {
                System.out.println("failed st " + e);
