@@ -26,6 +26,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
     private int gameSize;
     private CAL<Position> posList;
     private String[] projectiles;
+    private int leftBound, rightBound, topBound, bottomBound;
 
     // snake - temp?
     private int width;
@@ -168,15 +169,30 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
 
         if(projectiles == null || projectiles.length == 0) return;
         for(int i=0; i<projectiles.length; i++) {
-            System.out.println(i + ": " + projectiles[i]);
+            // System.out.println("Proj #" + i + ": " + projectiles[i]);
             try {
                 String[] data = projectiles[i].split(" ");
-                int projX = Integer.parseInt(data[0]);
-                int projY = Integer.parseInt(data[1]);
+                int buffer = 30;
+                int x = Integer.parseInt(data[0]);
+                int y = Integer.parseInt(data[1]);
+                //relative: relate to player pos
+                int projY =  x - positionX; //result is distance from player/camera center
+                int projX =  y - positionY;
                 int projType = Integer.parseInt(data[2]);
                 //check projectile type here and draw accordingly
+
+                //initialize in the middle of the screen then apply distance
+                int calcX = 500-(width/2) + (projX) * (width);
+                int calcY = 450-(width/2) + (projY) * (width);
+
+                System.out.println(x + " " + y + " | " + calcX + " " + calcY);
+
+                if (calcX < 0 || calcX > dimensionX || calcY < 0 || calcY > dimensionY) continue;
+
+                System.out.println(calcX + " " + calcY);
+
                 g.setColor(Color.pink);
-                g.fillRect(projX, projY, 50, 50);
+                g.fillRect(calcX, calcY, 25, 25);
             } catch (Exception e) {}
         }
     }
@@ -187,6 +203,10 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
         int x = positionY;
         int y = positionX;
         int buffer = 30;
+        leftBound = x-30;
+        rightBound = x+30;
+        topBound = y-30;
+        bottomBound = y+30;
         char[][] currState = gameboard.getArr();
         for (int i = x - buffer; i < x + buffer; i++) {
             if (i < 0 || i >= gameSize)

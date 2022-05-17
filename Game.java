@@ -159,12 +159,9 @@ public class Game {
 
     public void moveProjectiles() {
         for(int i=0; i<projectiles.size(); i++) {
-            map[projectiles.get(i).getX()][projectiles.get(i).getY()] = '+';
             projectiles.get(i).move();
 
             //check collision here?
-
-            map[projectiles.get(i).getX()][projectiles.get(i).getY()] = 'X';
         }
     }
 
