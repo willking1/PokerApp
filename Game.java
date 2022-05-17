@@ -124,6 +124,9 @@ public class Game {
         System.out.println(powerUp);
         if(powerUp == -1) return; //check if last block is indeed powerup
         projectiles.add(new Projectile(powerUp, snakes.get(id).get(0).getX(), snakes.get(id).get(0).getY(), snakes.get(id).get(0).getDir(), targetX, targetY));
+        for(int i = 0; i < projectiles.size(); i++) {
+            System.out.println(projectiles.get(i).getX() + " " + projectiles.get(i).getY());
+        }
         map[last.getX()][last.getY()] = '+'; //visual deletion
         snakes.get(id).remove(snakes.get(id).size()-1); //actual deletion
     }
@@ -156,12 +159,12 @@ public class Game {
 
     public void moveProjectiles() {
         for(int i=0; i<projectiles.size(); i++) {
-            // map[projectiles.get(i).getX()][projectiles.get(i).getY()] = '+';
+            map[projectiles.get(i).getX()][projectiles.get(i).getY()] = '+';
             projectiles.get(i).move();
 
             //check collision here?
 
-            // map[projectiles.get(i).getX()][projectiles.get(i).getY()] = 'X';
+            map[projectiles.get(i).getX()][projectiles.get(i).getY()] = 'X';
         }
     }
 

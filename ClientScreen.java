@@ -390,10 +390,6 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
         if(keyCode == 40 || keyCode == 83) {
             out.println("move 2");
         }
-        //shooting should be done with mouse
-        // if(keyCode == 32) {
-        //     out.println("shot s");
-        // }
         out.flush();
     }
 
