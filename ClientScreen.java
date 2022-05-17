@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class ClientScreen extends JPanel implements KeyListener, ActionListener, MouseListener {
 
@@ -160,6 +162,18 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
             } catch (IOException e) {
                 System.out.println(e);
             }
+        }
+    }
+
+    public void playSound() {
+
+        try {
+            URL url = this.getClass().getClassLoader().getResource("sound/cannon.wav");
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(url));
+            clip.start();
+        } catch (Exception exc) {
+            exc.printStackTrace(System.out);
         }
     }
 
