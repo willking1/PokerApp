@@ -185,11 +185,11 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
                 int calcX = 500-(width/2) + (projX) * (width);
                 int calcY = 450-(width/2) + (projY) * (width);
 
-                System.out.println(x + " " + y + " | " + calcX + " " + calcY);
+                // System.out.println(x + " " + y + " | " + calcX + " " + calcY);
 
                 if (calcX < 0 || calcX > dimensionX || calcY < 0 || calcY > dimensionY) continue;
 
-                System.out.println(calcX + " " + calcY);
+                // System.out.println(calcX + " " + calcY);
 
                 g.setColor(Color.pink);
                 g.fillRect(calcX, calcY, 25, 25);
@@ -431,8 +431,8 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
     @Override
     public void mouseClicked(MouseEvent e) {
         //shooting will have to be done here
-        int x = e.getX();
-        int y = e.getY();
+        int y = e.getX()/width;
+        int x = e.getY()/width;
         out.println("shot " + x + " " + y);
     }
     public void mouseEntered(MouseEvent e) {}
