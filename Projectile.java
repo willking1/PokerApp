@@ -11,16 +11,17 @@ public class Projectile {
     private Position targetPos;
     private boolean collided;
     private boolean posX, posY;
-    private int num;
-    private int den;
+    private double num;
+    private double den;
+    private int slope;
     private int speed;
 
     public Projectile(int type, int x, int y, int dir, int targetX, int targetY) {
+        this.x = x;
+        this.y = y;
         height = 845;
         width = 1000;
         this.type = type;
-        this.x = x;
-        this.y = y;
         this.dir = dir;
         dist = 0;
         if(type == 2) {
@@ -32,18 +33,25 @@ public class Projectile {
         }
         collided = false;
         targetPos = new Position(targetX, targetY);
+        System.out.println(targetPos.getY() + " " + targetPos.getX());
         num = getNum();
         den = getDen();
+        while(Math.abs(num/speed) > 2 || Math.abs(den/speed) > 2) {
+            num/=2;
+            den/=2;
+        }
         System.out.println(num + " vs. " + den);
         move(); //move once to get clear of head
     }
 
-    private int getNum() {
-        return (targetPos.getY() - y);
+    private double getNum() {
+        System.out.println("D " + targetPos.getX() + " " + x);
+        return (targetPos.getX() - height/2);
     }
 
-    private int getDen() {
-        return (targetPos.getX() - x);
+    private double getDen() {
+        System.out.println("D " + targetPos.getY() + " " + y);
+        return (targetPos.getY() - width/2);
     }
 
     public void move() {
@@ -62,6 +70,7 @@ public class Projectile {
         // if(dir == 4) y++;
 
         //move with slope
+        System.out.println("S: " + num/speed + " " + den/speed);
         x += ((num)/speed);
         y += ((den)/speed);
 

@@ -445,8 +445,8 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
     @Override
     public void mouseClicked(MouseEvent e) {
         //shooting will have to be done here
-        int y = e.getX()/width;
-        int x = e.getY()/width;
+        int y = e.getX();
+        int x = e.getY();
         out.println("shot " + x + " " + y);
     }
     public void mouseEntered(MouseEvent e) {}
