@@ -33,10 +33,9 @@ public class Projectile {
         }
         collided = false;
         targetPos = new Position(targetX, targetY);
-        System.out.println(targetPos.getY() + " " + targetPos.getX());
         num = getNum();
         den = getDen();
-        while(Math.abs(num/speed) > 2 || Math.abs(den/speed) > 2) {
+        while(Math.abs(num/speed) > 3 || Math.abs(den/speed) > 3) {
             num/=2;
             den/=2;
         }
@@ -45,12 +44,10 @@ public class Projectile {
     }
 
     private double getNum() {
-        System.out.println("D " + targetPos.getX() + " " + x);
         return (targetPos.getX() - height/2);
     }
 
     private double getDen() {
-        System.out.println("D " + targetPos.getY() + " " + y);
         return (targetPos.getY() - width/2);
     }
 
@@ -63,14 +60,7 @@ public class Projectile {
             }
         }
 
-        //basic directional movement
-        // if(dir == 1) x--;
-        // if(dir == 2) x++;
-        // if(dir == 3) y--;
-        // if(dir == 4) y++;
-
         //move with slope
-        System.out.println("S: " + num/speed + " " + den/speed);
         x += ((num)/speed);
         y += ((den)/speed);
 

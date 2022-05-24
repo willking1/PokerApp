@@ -160,8 +160,6 @@ public class Game {
     public void moveProjectiles() {
         for(int i=0; i<projectiles.size(); i++) {
             projectiles.get(i).move();
-
-            //check collision here?
         }
     }
 
@@ -175,7 +173,6 @@ public class Game {
         return s.substring(0, s.length()-1);
     }
 
-    //Also slightly buzzin at the moment
     public void move() {
         //move the snakes
         for(int i=0; i<snakes.size(); i++) {
@@ -197,9 +194,16 @@ public class Game {
             }
         }
 
-        //check for collision
+        //check for player collision
         for(int i=0; i<snakes.size(); i++) {
             if(snakes.get(i).size() != 0 && checkCollision(i)) {
+                kill(i);
+            }
+        }
+
+        //check for projectile collision
+        for(int i = 0; i < snakes.size(); i++) {
+            if(snakes.get(i).size() != 0 && checkProjCollision(i)) {
                 kill(i);
             }
         }
@@ -219,6 +223,19 @@ public class Game {
             map[snakes.get(i).get(j).getX()][snakes.get(i).get(j).getY()] = '+';
         }
         snakes.set(i, new CAL<Tail>());
+    }
+
+    public boolean checkProjCollision(int index) {
+        for(int i = 0; i < snakes.get(index).size(); i++) {
+            for(int j = 0; j < projectiles.size(); j++) {
+                // System.out.println("projX: " + projectiles.get(j).getX() + " projY: " + projectiles.get(j).getY());
+                // System.out.println("snakeX: " + snakes.get(index).get(i).getX() + " snakeY: " + snakes.get(index).get(i).getY()); 
+                if(projectiles.get(j).getX() >= snakes.get(index).get(i).getX() && projectiles.get(j).getX() < snakes.get(index).get(i).getX()+18 && projectiles.get(j).getY() >= snakes.get(index).get(i).getY() && projectiles.get(j).getY() < snakes.get(index).get(i).getY()+18) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public boolean checkCollision(int index) {

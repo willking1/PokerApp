@@ -20,7 +20,7 @@ public class Manager {
 
         started = false;
 
-        fps = 65;
+        fps = 650;
         moveDelay = 1;
     }
 
@@ -130,7 +130,7 @@ public class Manager {
             if(moveCount == moveDelay) {
                 game.move();
                 counter++;
-                if(counter == 10) {
+                if(counter == 1) {
                     game.addBlock();
                     counter = 0;
                 }
