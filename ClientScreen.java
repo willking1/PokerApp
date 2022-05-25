@@ -206,7 +206,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
                 // System.out.println(calcX + " " + calcY);
 
                 g.setColor(Color.pink);
-                g.fillRect(calcX, calcY, 25, 25);
+                g.fillRect((int)calcX, (int)calcY, 25, 25);
             } catch (Exception e) {}
         }
     }

@@ -20,7 +20,7 @@ public class Manager {
 
         started = false;
 
-        fps = 650;
+        fps = 65;
         moveDelay = 1;
     }
 

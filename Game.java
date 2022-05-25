@@ -228,9 +228,8 @@ public class Game {
     public boolean checkProjCollision(int index) {
         for(int i = 0; i < snakes.get(index).size(); i++) {
             for(int j = 0; j < projectiles.size(); j++) {
-                // System.out.println("projX: " + projectiles.get(j).getX() + " projY: " + projectiles.get(j).getY());
-                // System.out.println("snakeX: " + snakes.get(index).get(i).getX() + " snakeY: " + snakes.get(index).get(i).getY()); 
-                if(projectiles.get(j).getX() >= snakes.get(index).get(i).getX() && projectiles.get(j).getX() < snakes.get(index).get(i).getX()+18 && projectiles.get(j).getY() >= snakes.get(index).get(i).getY() && projectiles.get(j).getY() < snakes.get(index).get(i).getY()+18) {
+                if(projectiles.get(j).getX() >= snakes.get(index).get(i).getX() && projectiles.get(j).getX() < snakes.get(index).get(i).getX()+1 && projectiles.get(j).getY() >= snakes.get(index).get(i).getY() && projectiles.get(j).getY() < snakes.get(index).get(i).getY()+1) {
+                    System.out.println("Collided: " + i + " | " + projectiles.get(j).getX() + " " + projectiles.get(j).getY() + " | " + snakes.get(index).get(i).getX() + " " + snakes.get(index).get(i).getY());
                     return true;
                 }
             }
