@@ -247,31 +247,29 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
                 }
-                if (Character.isDigit(currState[i][j])) {
-                    Integer.valueOf(currState[i][j]);
-                    g.setColor(Color.GREEN);
-                    g.fillRect(calcX, calcY, (width), (width));
-                    g.setColor(Color.BLACK);
-                }
                 if (currState[i][j] == 'G') {
                     g.setColor(Color.GREEN);
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
+                    g.drawRect(calcX, calcY, (width-1), (width-1));
                 }
                 if (currState[i][j] == 'R') {
                     g.setColor(Color.RED);
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
+                    g.drawRect(calcX, calcY, (width-1), (width-1));
                 }
                 if (currState[i][j] == 'B') {
                     g.setColor(Color.BLUE);
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
+                    g.drawRect(calcX, calcY, (width-1), (width-1));
                 }
                 if (currState[i][j] == 'P') {
                     g.setColor(Color.MAGENTA);
                     g.fillRect(calcX, calcY, (width), (width));
                     g.setColor(Color.BLACK);
+                    g.drawRect(calcX, calcY, (width-1), (width-1));
                 }
                 if (currState[i][j] == '#') {
                     g.setColor(Color.BLACK);

@@ -35,13 +35,12 @@ public class Projectile {
         targetPos = new Position(targetX, targetY);
         num = getNum();
         den = getDen();
-        while(Math.abs(num/speed) > 1.7 || Math.abs(den/speed) > 1.7) {
+        while(Math.abs(num/speed) > 1.3 || Math.abs(den/speed) > 1.3) {
             num/=1.1;
             den/=1.1;
         }
         System.out.println(num + " vs. " + den);
         move(); //move twice to get clear of head
-        move();
     }
 
     private double getNum() {

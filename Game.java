@@ -136,7 +136,7 @@ public class Game {
         int ind = snakes.size();
         snakes.add(new CAL<Tail>());
         snakes.get(ind).add(new Tail(null, dir, startX, startY, map));
-        map[startX][startY] = Character.forDigit(ind, 10);
+        map[startX][startY] = 'G';
         for(int i=1; i<startCount; i++) {
             int newX, newY;
             newX = startX;
