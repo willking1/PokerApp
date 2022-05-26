@@ -1,8 +1,8 @@
 public class Projectile {
 
     private int type;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
     private int dir;
     private int range;
     private int dist;
@@ -14,9 +14,9 @@ public class Projectile {
     private double num;
     private double den;
     private int slope;
-    private int speed;
+    private double speed;
 
-    public Projectile(int type, int x, int y, int dir, int targetX, int targetY) {
+    public Projectile(int type, double x, double y, int dir, int targetX, int targetY) {
         this.x = x;
         this.y = y;
         height = 845;
@@ -45,11 +45,11 @@ public class Projectile {
     }
 
     private double getNum() {
-        return (targetPos.getX() - height/2);
+        return ((double)targetPos.getX() - (double)height/2);
     }
 
     private double getDen() {
-        return (targetPos.getY() - width/2);
+        return ((double)targetPos.getY() - (double)width/2);
     }
 
     public void move() {
@@ -72,7 +72,7 @@ public class Projectile {
         //possibly do respective things here?
     }
 
-    public int getX() {return x;}
-    public int getY() {return y;}
+    public int getX() {return (int)(x+0.5);}
+    public int getY() {return (int)(y+0.5);}
     public int getType() {return type;}
 }
