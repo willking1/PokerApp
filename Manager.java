@@ -65,6 +65,8 @@ public class Manager {
                 String msg2 = game.getPosition(i);
                 clients.get(i).send(msg2);
                 clients.get(i).send(getProjPos());
+                boolean eaten = game.checkEaten(i);
+                clients.get(i).send(eaten + "");
             }
         }
     }
@@ -124,8 +126,6 @@ public class Manager {
         started = true;
         int moveCount = 0;
         while(true) {
-
-            game.moveProjectiles();  
 
             if(moveCount == moveDelay) {
                 game.move();

@@ -8,6 +8,7 @@ public class Game {
     private CAL<CAL<Tail>> snakes;
     private CAL<PowerUp> blocks;
     private CAL<Projectile> projectiles;
+    private CAL<Boolean> eaten;
 
     public Game(char[][] map) {
         this.map = map;
@@ -19,6 +20,7 @@ public class Game {
         blocks = new CAL<PowerUp>();
         projectiles = new CAL<Projectile>();
         cloneMap();
+        eaten = new CAL<Boolean>();
     }
 
     private void cloneMap() {
@@ -135,6 +137,7 @@ public class Game {
         int dir = Integer.parseInt(d);
         int ind = snakes.size();
         snakes.add(new CAL<Tail>());
+        eaten.add(false);
         snakes.get(ind).add(new Tail(null, dir, startX, startY, map));
         map[startX][startY] = 'G';
         for(int i=1; i<startCount; i++) {
@@ -187,6 +190,7 @@ public class Game {
                     for(int k = 0; k < blocks.size(); k++)  {
                         if(blocks.get(k).getX() == snakes.get(i).get(j).getX() && blocks.get(k).getY() == snakes.get(i).get(j).getY()) {
                             addSnakeBlock(snakes.get(i), blocks.get(k), i);
+                            eaten.set(i, true);
                         }
                     }
                 }
@@ -233,6 +237,14 @@ public class Game {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+
+    public boolean checkEaten(int i) {
+        if(eaten.get(i)) {
+            eaten.set(i, false);
+            return true;
         }
         return false;
     }

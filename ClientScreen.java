@@ -165,10 +165,10 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
         }
     }
 
-    public void playSound() {
+    public void playSound(String fileName) {
 
         try {
-            URL url = this.getClass().getClassLoader().getResource("sound/cannon.wav");
+            URL url = this.getClass().getClassLoader().getResource("./resources/" + fileName + ".wav");
             Clip clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(url));
             clip.start();
@@ -332,6 +332,12 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
                         projectiles = projInput.split("/");
                     }
 
+                    //GET EATEN
+                    String eatenInput = in.readLine();
+                    if(eatenInput.equals("true")) {
+                        playSound("chomp");
+                    }
+
                 }
                 if (!started) {
                     target = Integer.valueOf(in.readLine());
@@ -446,6 +452,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
         int y = e.getX();
         int x = e.getY();
         out.println("shot " + x + " " + y);
+        playSound("fire");
     }
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
