@@ -29,6 +29,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
     private CAL<Position> posList;
     private String[] projectiles;
     private int leftBound, rightBound, topBound, bottomBound;
+    private boolean instructing;
 
     // snake - temp?
     private int width;
@@ -48,10 +49,12 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
     private JButton twoPlayerB;
     private JButton threePlayerB;
     private JButton fourPlayerB;
+    private JButton instButton;
+    private JButton backButton;
     private JLabel waitingLabel;
 
     public ClientScreen() throws IOException {
-
+        instructing = false;
         dimensionX = 1000;
         dimensionY = 1000;
 
@@ -85,8 +88,8 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
         this.add(titleLabel);
         playerSelect = new JLabel();
         playerSelect.setFont(new Font("Arial", Font.BOLD, 20));
-        playerSelect.setHorizontalAlignment(SwingConstants.LEFT);
-        playerSelect.setBounds(359, 232, 263, 30);
+        playerSelect.setHorizontalAlignment(SwingConstants.CENTER);
+        playerSelect.setBounds(100, 232, 750, 30);
         playerSelect.setText("Select number of players:");
         this.add(playerSelect);
         twoPlayerB = new JButton();
@@ -117,6 +120,20 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
         waitingLabel.setBounds(238, 47, 600, 30);
         waitingLabel.setText("Waiting for all snakes to connect...");
         this.add(waitingLabel);
+        instButton = new JButton();
+        instButton.setFont(new Font("Arial", Font.BOLD, 20));
+        instButton.setHorizontalAlignment(SwingConstants.CENTER);
+        instButton.setBounds(50, 305, 200, 150);
+        instButton.setText("Instructions");
+        this.add(instButton);
+        instButton.addActionListener(this);
+        backButton = new JButton();
+        backButton.setFont(new Font("Arial", Font.BOLD, 20));
+        backButton.setHorizontalAlignment(SwingConstants.CENTER);
+        backButton.setBounds(545, 542, 200, 150);
+        backButton.setText("Back");
+        this.add(backButton);
+        backButton.addActionListener(this);
     }
 
     public void paintComponent(Graphics g) {
@@ -134,6 +151,8 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
             threePlayerB.setVisible(false);
             fourPlayerB.setVisible(false);
             waitingLabel.setVisible(false);
+            instButton.setVisible(false);
+            backButton.setVisible(false);
             if (started) {
                 drawGame(g);
                 drawProjectiles(g);
@@ -141,12 +160,27 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
             }
         }
         if (screen == 1) {
-            titleLabel.setVisible(true);
-            playerSelect.setVisible(true);
-            twoPlayerB.setVisible(true);
-            threePlayerB.setVisible(true);
-            fourPlayerB.setVisible(true);
-            waitingLabel.setVisible(false);
+            if(!instructing) {
+                titleLabel.setVisible(true);
+                playerSelect.setVisible(true);
+                twoPlayerB.setVisible(true);
+                threePlayerB.setVisible(true);
+                fourPlayerB.setVisible(true);
+                waitingLabel.setVisible(false);
+                instButton.setVisible(true);
+                backButton.setVisible(false);
+            } else {
+                titleLabel.setVisible(true);
+                playerSelect.setVisible(true);
+                twoPlayerB.setVisible(false);
+                threePlayerB.setVisible(false);
+                fourPlayerB.setVisible(false);
+                waitingLabel.setVisible(false);
+                instButton.setVisible(false);
+                backButton.setVisible(true);
+            }
+            
+            
         }
         if (screen == 2) {
             titleLabel.setVisible(false);
@@ -155,6 +189,8 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
             threePlayerB.setVisible(false);
             fourPlayerB.setVisible(false);
             waitingLabel.setVisible(true);
+            instButton.setVisible(false);
+            backButton.setVisible(false);
             try {
                 BufferedImage img = ImageIO.read(
                         new URL("https://media.australian.museum/media/dd/images/Some_image.width-800.139634f.jpg"));
@@ -443,6 +479,24 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
         }
         if (e.getSource() == fourPlayerB) {
             out.println("targ 4");
+        }
+        if (e.getSource() == instButton) {
+            twoPlayerB.setVisible(false);
+            threePlayerB.setVisible(false);
+            fourPlayerB.setVisible(false);
+            backButton.setVisible(true);
+            titleLabel.setText("Instructions");
+            playerSelect.setText("Use arrow keys to move, click to shoot when holding a projectile");
+            instructing = true;
+        }
+        if(e.getSource() == backButton) {
+            twoPlayerB.setVisible(true);
+            threePlayerB.setVisible(true);
+            fourPlayerB.setVisible(true);
+            backButton.setVisible(false);
+            titleLabel.setText("Snake Royale");
+            playerSelect.setText("Select number of players:");
+            instructing = false;
         }
     }
 
