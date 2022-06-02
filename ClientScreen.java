@@ -89,7 +89,8 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
         playerSelect = new JLabel();
         playerSelect.setFont(new Font("Arial", Font.BOLD, 20));
         playerSelect.setHorizontalAlignment(SwingConstants.CENTER);
-        playerSelect.setBounds(100, 232, 750, 30);
+        playerSelect.setVerticalAlignment(SwingConstants.TOP);
+        playerSelect.setBounds(100, 232, 750, 200);
         playerSelect.setText("Select number of players:");
         this.add(playerSelect);
         twoPlayerB = new JButton();
@@ -489,7 +490,7 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
             fourPlayerB.setVisible(false);
             backButton.setVisible(true);
             titleLabel.setText("Instructions");
-            playerSelect.setText("Use arrow keys to move, click to shoot when holding a projectile");
+            playerSelect.setText("<html>Use arrow keys to move, click to shoot out blocks you have collected by moving over. Your snake will die if it runs into another snake, itself, a wall, or gets hit by a projectile. Try to be the last snake alive.</html>");
             instructing = true;
         }
         if(e.getSource() == backButton) {

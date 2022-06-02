@@ -35,7 +35,7 @@ public class Projectile {
         targetPos = new Position(targetX, targetY);
         num = getNum();
         den = getDen();
-        while(Math.abs(num/speed) > 1.3 || Math.abs(den/speed) > 1.3) {
+        while(Math.abs(num/speed) > 1.2 || Math.abs(den/speed) > 1.2) {
             num/=1.1;
             den/=1.1;
         }
