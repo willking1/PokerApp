@@ -123,11 +123,11 @@ public class Game {
     public void shoot(int id, int targetX, int targetY) {
         Tail last = snakes.get(id).get(snakes.get(id).size()-1); //gets last block in snake
         int powerUp = last.getPowerUp();
-        System.out.println(powerUp);
+        // System.out.println(powerUp);
         if(powerUp == -1) return; //check if last block is indeed powerup
         projectiles.add(new Projectile(powerUp, snakes.get(id).get(0).getX(), snakes.get(id).get(0).getY(), snakes.get(id).get(0).getDir(), targetX, targetY));
         for(int i = 0; i < projectiles.size(); i++) {
-            System.out.println(projectiles.get(i).getX() + " " + projectiles.get(i).getY());
+            // System.out.println(projectiles.get(i).getX() + " " + projectiles.get(i).getY());
         }
         map[last.getX()][last.getY()] = '+'; //visual deletion
         snakes.get(id).remove(snakes.get(id).size()-1); //actual deletion
@@ -233,7 +233,7 @@ public class Game {
         for(int i = 0; i < snakes.get(index).size(); i++) {
             for(int j = 0; j < projectiles.size(); j++) {
                 if(projectiles.get(j).getX() >= snakes.get(index).get(i).getX() && projectiles.get(j).getX() < snakes.get(index).get(i).getX()+1 && projectiles.get(j).getY() >= snakes.get(index).get(i).getY() && projectiles.get(j).getY() < snakes.get(index).get(i).getY()+1) {
-                    System.out.println("Collided: " + i + " | " + projectiles.get(j).getX() + " " + projectiles.get(j).getY() + " | " + snakes.get(index).get(i).getX() + " " + snakes.get(index).get(i).getY());
+                    // System.out.println("Collided: " + i + " | " + projectiles.get(j).getX() + " " + projectiles.get(j).getY() + " | " + snakes.get(index).get(i).getX() + " " + snakes.get(index).get(i).getY());
                     return true;
                 }
             }

@@ -366,6 +366,9 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
                     if(projInput != null && projInput != "" && projInput.indexOf('x') != -1) {
                         projInput = projInput.substring(1, projInput.length());
                         projectiles = projInput.split("/");
+
+                    } else {
+                        
                     }
 
                     //GET EATEN
@@ -412,11 +415,11 @@ public class ClientScreen extends JPanel implements KeyListener, ActionListener,
                         idStr = in.readLine();
                     }
                     id = Integer.valueOf(idStr);
-                    System.out.println("Spawned :" + id);
+                    
                     started = true;
                 }
             } catch (Exception e) {
-                System.out.println("check");
+                
                 System.out.println(e.getMessage());
                 break;
             }

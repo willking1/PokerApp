@@ -127,6 +127,8 @@ public class Manager {
         int moveCount = 0;
         while(true) {
 
+            game.moveProjectiles();
+
             if(moveCount == moveDelay) {
                 game.move();
                 counter++;
